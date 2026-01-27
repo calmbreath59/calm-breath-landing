@@ -2,8 +2,11 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CountdownTimer } from "./CountdownTimer";
+import { usePayment } from "@/hooks/usePayment";
 
 export const PricingCard = () => {
+  const { initiatePayment, isLoading } = usePayment();
+
   const features = [
     "Acesso a todos os vídeos",
     "Áudios relaxantes ilimitados",
@@ -11,6 +14,10 @@ export const PricingCard = () => {
     "Suporte via email",
     "Atualizações gratuitas",
   ];
+
+  const handlePayment = () => {
+    initiatePayment();
+  };
 
   return (
     <Card className="relative overflow-hidden border-primary/30 shadow-xl max-w-md mx-auto">
@@ -49,8 +56,13 @@ export const PricingCard = () => {
           ))}
         </ul>
 
-        <Button className="w-full text-lg py-6" size="lg">
-          Começar Agora
+        <Button 
+          className="w-full text-lg py-6" 
+          size="lg"
+          onClick={handlePayment}
+          disabled={isLoading}
+        >
+          {isLoading ? "A processar..." : "Começar Agora"}
         </Button>
         
         <p className="text-xs text-muted-foreground text-center">
