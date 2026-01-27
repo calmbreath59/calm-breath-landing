@@ -1,4 +1,4 @@
-import { Video, Headphones, BookOpen, Heart, Shield, Sparkles } from "lucide-react";
+import { Video, Headphones, BookOpen, MessageSquare, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -24,14 +24,9 @@ const Index = () => {
       description: "Leituras breves e práticas com dicas simples que podes aplicar no teu dia-a-dia.",
     },
     {
-      icon: Heart,
-      title: "Apoio Contínuo",
-      description: "Conteúdo atualizado regularmente para te acompanhar na tua jornada de bem-estar.",
-    },
-    {
-      icon: Shield,
-      title: "Privacidade Total",
-      description: "Os teus dados estão seguros connosco. A tua saúde mental é uma prioridade.",
+      icon: MessageSquare,
+      title: "Feedback",
+      description: "Partilha a tua experiência e ajuda-nos a melhorar continuamente os nossos conteúdos.",
     },
     {
       icon: Sparkles,

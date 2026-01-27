@@ -1,5 +1,5 @@
-import { Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/calm-breath-logo.png";
 
 export const Header = () => {
   return (
@@ -7,7 +7,7 @@ export const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
-            <Wind className="w-8 h-8 text-primary" />
+            <img src={logo} alt="Calm Breath" className="w-10 h-10" />
             <span className="text-xl font-bold text-foreground">Calm Breath</span>
           </div>
           
