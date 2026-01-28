@@ -1,12 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import { Video, Headphones, BookOpen, MessageSquare, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { PricingCard } from "@/components/PricingCard";
+import { useAuth } from "@/contexts/AuthContext";
 import heroImage from "@/assets/hero-calm.jpg";
 
 const Index = () => {
+  const { user, profile } = useAuth();
+  const navigate = useNavigate();
+
   const features = [
     {
       icon: Video,
@@ -35,6 +40,18 @@ const Index = () => {
     },
   ];
 
+  const handleGetStarted = () => {
+    if (user) {
+      if (profile?.has_paid) {
+        navigate("/dashboard");
+      } else {
+        navigate("/payment");
+      }
+    } else {
+      navigate("/auth?mode=signup");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -59,8 +76,8 @@ const Index = () => {
               a encontrar paz no teu dia-a-dia.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8 py-6">
-                Começar Agora
+              <Button size="lg" className="text-lg px-8 py-6" onClick={handleGetStarted}>
+                {user ? (profile?.has_paid ? "Ir para Dashboard" : "Completar Pagamento") : "Começar Agora"}
               </Button>
               <Button size="lg" variant="outline" className="text-lg px-8 py-6">
                 Saber Mais

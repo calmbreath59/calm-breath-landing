@@ -1,11 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CountdownTimer } from "./CountdownTimer";
-import { usePayment } from "@/hooks/usePayment";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const PricingCard = () => {
-  const { initiatePayment, isLoading } = usePayment();
+  const { user, profile, isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   const features = [
     "Acesso a todos os vídeos",
@@ -15,8 +17,16 @@ export const PricingCard = () => {
     "Atualizações gratuitas",
   ];
 
-  const handlePayment = () => {
-    initiatePayment();
+  const handleClick = () => {
+    if (user) {
+      if (profile?.has_paid || isAdmin) {
+        navigate("/dashboard");
+      } else {
+        navigate("/payment");
+      }
+    } else {
+      navigate("/auth?mode=signup");
+    }
   };
 
   return (
@@ -59,10 +69,9 @@ export const PricingCard = () => {
         <Button 
           className="w-full text-lg py-6" 
           size="lg"
-          onClick={handlePayment}
-          disabled={isLoading}
+          onClick={handleClick}
         >
-          {isLoading ? "A processar..." : "Começar Agora"}
+          {user ? (profile?.has_paid || isAdmin ? "Ir para Dashboard" : "Pagar Agora") : "Começar Agora"}
         </Button>
         
         <p className="text-xs text-muted-foreground text-center">
