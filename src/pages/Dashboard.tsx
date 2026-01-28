@@ -1,12 +1,21 @@
 import { useState } from "react";
-import { Video, Headphones, BookOpen, Play, Lock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Video, Headphones, BookOpen, Play, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/calm-breath-logo.png";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("videos");
+  const { profile, isAdmin, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   const videos = [
     {
@@ -103,9 +112,21 @@ const Dashboard = () => {
               <img src={logo} alt="Calm Breath" className="w-10 h-10" />
               <span className="text-xl font-bold text-foreground">Calm Breath</span>
             </div>
-            <Button variant="outline" onClick={() => window.location.href = "/"}>
-              Voltar
-            </Button>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground hidden sm:block">
+                {profile?.full_name || profile?.email}
+              </span>
+              {isAdmin && (
+                <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>
+                  <Shield className="w-4 h-4 mr-2" />
+                  Admin
+                </Button>
+              )}
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sair
+              </Button>
+            </div>
           </div>
         </div>
       </header>
