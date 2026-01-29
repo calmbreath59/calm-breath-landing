@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +11,7 @@ import logo from "@/assets/calm-breath-logo.png";
 import { useToast } from "@/hooks/use-toast";
 
 const Payment = () => {
+  const { t } = useTranslation();
   const { user, profile, isLoading: authLoading, refreshProfile } = useAuth();
   const { initiatePayment, isLoading: paymentLoading } = usePayment();
   const navigate = useNavigate();
@@ -32,10 +34,9 @@ const Payment = () => {
     const paymentStatus = searchParams.get("payment");
     if (paymentStatus === "success") {
       toast({
-        title: "Pagamento confirmado!",
-        description: "Obrigado pela tua compra. Estamos a verificar...",
+        title: t("payment.paymentConfirmed"),
+        description: t("payment.paymentConfirmedDesc"),
       });
-      // Refresh profile to check payment status
       const checkPayment = async () => {
         await new Promise(resolve => setTimeout(resolve, 2000));
         await refreshProfile();
@@ -43,19 +44,19 @@ const Payment = () => {
       checkPayment();
     } else if (paymentStatus === "canceled") {
       toast({
-        title: "Pagamento cancelado",
-        description: "Podes tentar novamente quando quiseres.",
+        title: t("payment.paymentCanceled"),
+        description: t("payment.paymentCanceledDesc"),
         variant: "destructive",
       });
     }
-  }, [searchParams, refreshProfile, toast]);
+  }, [searchParams, refreshProfile, toast, t]);
 
   const features = [
-    "Acesso a todos os vídeos",
-    "Áudios relaxantes ilimitados",
-    "Guias de texto personalizados",
-    "Suporte via email",
-    "Atualizações gratuitas",
+    t("pricing.features.allVideos"),
+    t("pricing.features.unlimitedAudio"),
+    t("pricing.features.textGuides"),
+    t("pricing.features.emailSupport"),
+    t("pricing.features.freeUpdates"),
   ];
 
   const handlePayment = () => {
@@ -75,30 +76,30 @@ const Payment = () => {
       <Card className="w-full max-w-md relative overflow-hidden border-primary/30 shadow-xl">
         {/* Promo badge */}
         <div className="absolute top-0 right-0 bg-secondary text-secondary-foreground text-sm font-semibold px-4 py-1 rounded-bl-lg">
-          Promoção
+          {t("pricing.promotion")}
         </div>
 
         <CardHeader className="text-center pb-2 pt-8">
           <div className="flex justify-center mb-4">
             <img src={logo} alt="Calm Breath" className="w-16 h-16" />
           </div>
-          <CardTitle className="text-2xl">Olá, {profile?.full_name || user?.email}!</CardTitle>
+          <CardTitle className="text-2xl">{t("payment.hello")}, {profile?.full_name || user?.email}!</CardTitle>
           <p className="text-muted-foreground mt-2">
-            Completa o pagamento para aceder a todo o conteúdo.
+            {t("payment.completePayment")}
           </p>
 
           <div className="mt-6">
             <div className="flex items-center justify-center gap-3">
-              <span className="text-2xl text-muted-foreground line-through">10€</span>
-              <span className="text-5xl font-bold text-primary">4€</span>
+              <span className="text-2xl text-muted-foreground line-through">{t("pricing.originalPrice")}</span>
+              <span className="text-5xl font-bold text-primary">{t("pricing.currentPrice")}</span>
             </div>
-            <p className="text-sm text-muted-foreground mt-2">Preço promocional</p>
+            <p className="text-sm text-muted-foreground mt-2">{t("pricing.promotionalPrice")}</p>
           </div>
         </CardHeader>
 
         <CardContent className="space-y-6">
           <div className="text-center">
-            <p className="text-sm text-muted-foreground mb-4">Oferta termina em:</p>
+            <p className="text-sm text-muted-foreground mb-4">{t("pricing.offerEnds")}</p>
             <CountdownTimer />
           </div>
 
@@ -122,15 +123,15 @@ const Payment = () => {
             {paymentLoading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                A processar...
+                {t("payment.processing")}
               </>
             ) : (
-              "Pagar Agora - 4€"
+              t("payment.payNow")
             )}
           </Button>
 
           <p className="text-xs text-muted-foreground text-center">
-            Pagamento único. Sem taxas escondidas.
+            {t("pricing.oneTime")}
           </p>
 
           <div className="text-center">
@@ -139,7 +140,7 @@ const Payment = () => {
               onClick={() => navigate("/")}
               className="text-sm text-muted-foreground hover:text-foreground"
             >
-              ← Voltar à página inicial
+              {t("payment.backToHome")}
             </button>
           </div>
         </CardContent>

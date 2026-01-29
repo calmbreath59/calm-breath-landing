@@ -1,0 +1,154 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name"
+  },
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "about": "About",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "title": "Find your inner peace",
+    "subtitle": "Discover breathing techniques and guided meditation to reduce stress and improve your well-being",
+    "cta": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "features": {
+    "title": "Features",
+    "subtitle": "Everything you need for a calmer life",
+    "videos": {
+      "title": "Guided Videos",
+      "description": "Meditation and breathing sessions on video"
+    },
+    "audio": {
+      "title": "Relaxing Audio",
+      "description": "Nature sounds and music to relax"
+    },
+    "guides": {
+      "title": "Text Guides",
+      "description": "Detailed instructions and practical tips"
+    },
+    "progress": {
+      "title": "Track Progress",
+      "description": "Monitor your evolution over time"
+    }
+  },
+  "pricing": {
+    "title": "Simple Pricing",
+    "subtitle": "Lifetime access to all content",
+    "promotion": "Promotion",
+    "originalPrice": "€10",
+    "currentPrice": "€4",
+    "promotionalPrice": "Promotional price",
+    "offerEnds": "Offer ends in:",
+    "features": {
+      "allVideos": "Access to all videos",
+      "unlimitedAudio": "Unlimited relaxing audio",
+      "textGuides": "Personalized text guides",
+      "emailSupport": "Email support",
+      "freeUpdates": "Free updates"
+    },
+    "cta": "Pay Now - €4",
+    "oneTime": "One-time payment. No hidden fees."
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create account",
+    "loginSubtitle": "Sign in to access your content",
+    "registerSubtitle": "Create an account to start your journey",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "Your name",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "••••••••",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "registerLink": "Sign up",
+    "loginLink": "Sign in",
+    "backToHome": "← Back to home"
+  },
+  "payment": {
+    "hello": "Hello",
+    "completePayment": "Complete your payment to access all content.",
+    "paymentConfirmed": "Payment confirmed!",
+    "paymentConfirmedDesc": "Thank you for your purchase. Verifying...",
+    "paymentCanceled": "Payment canceled",
+    "paymentCanceledDesc": "You can try again whenever you want.",
+    "processing": "Processing...",
+    "payNow": "Pay Now - €4",
+    "backToHome": "← Back to home",
+    "errorTitle": "Error",
+    "errorDesc": "Could not initiate payment. Please try again."
+  },
+  "dashboard": {
+    "title": "Your Peace Space",
+    "welcome": "Welcome",
+    "tabs": {
+      "videos": "Videos",
+      "audio": "Audio",
+      "guides": "Guides"
+    },
+    "videos": {
+      "title": "Meditation Videos",
+      "description": "Explore our guided meditation and breathing sessions.",
+      "placeholder": "Video content coming soon..."
+    },
+    "audio": {
+      "title": "Relaxing Audio",
+      "description": "Nature sounds and ambient music to relax.",
+      "placeholder": "Audio content coming soon..."
+    },
+    "guides": {
+      "title": "Practical Guides",
+      "description": "Detailed instructions for your practices.",
+      "placeholder": "Guide content coming soon..."
+    }
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "stats": {
+      "totalUsers": "Total Users",
+      "totalRevenue": "Total Revenue",
+      "paidUsers": "Paid Users",
+      "conversionRate": "Conversion Rate"
+    },
+    "recentPayments": "Recent Payments",
+    "table": {
+      "user": "User",
+      "amount": "Amount",
+      "status": "Status",
+      "date": "Date"
+    },
+    "noPayments": "No payments recorded"
+  },
+  "footer": {
+    "copyright": "Copyright © 2026 Calm Breath"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "backHome": "Back to Home"
+  }
+}

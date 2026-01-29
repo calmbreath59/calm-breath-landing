@@ -1,6 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Wind, Mail } from "lucide-react";
 
 export const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-card border-t border-border py-12">
       <div className="container mx-auto px-4">
@@ -21,7 +24,7 @@ export const Footer = () => {
           </div>
           
           <p className="text-sm text-muted-foreground">
-            Copyright © 2026 Calm Breath
+            {t("footer.copyright")}
           </p>
         </div>
       </div>

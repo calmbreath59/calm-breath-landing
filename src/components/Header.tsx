@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import logo from "@/assets/calm-breath-logo.png";
 
 export const Header = () => {
+  const { t } = useTranslation();
   const { user, profile, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -35,33 +38,34 @@ export const Header = () => {
           
           <nav className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-              Funcionalidades
+              {t("nav.features")}
             </a>
             <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">
-              Sobre
+              {t("nav.about")}
             </a>
             <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-              Preços
+              {t("nav.pricing")}
             </a>
           </nav>
 
           <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             {user ? (
               <>
                 <Button variant="ghost" onClick={handleAuth}>
-                  {profile?.has_paid || isAdmin ? "Dashboard" : "Pagar"}
+                  {profile?.has_paid || isAdmin ? t("nav.dashboard") : t("pricing.cta")}
                 </Button>
                 <Button variant="outline" onClick={handleLogout}>
-                  Sair
+                  {t("common.logout")}
                 </Button>
               </>
             ) : (
               <>
                 <Button variant="ghost" onClick={() => navigate("/auth")}>
-                  Entrar
+                  {t("common.login")}
                 </Button>
                 <Button onClick={() => navigate("/auth?mode=signup")}>
-                  Começar
+                  {t("nav.getStarted")}
                 </Button>
               </>
             )}

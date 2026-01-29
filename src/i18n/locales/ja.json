@@ -1,0 +1,154 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ",
+    "search": "検索",
+    "logout": "ログアウト",
+    "login": "ログイン",
+    "register": "登録",
+    "email": "メール",
+    "password": "パスワード",
+    "name": "名前"
+  },
+  "nav": {
+    "home": "ホーム",
+    "features": "機能",
+    "pricing": "料金",
+    "about": "概要",
+    "dashboard": "ダッシュボード",
+    "admin": "管理",
+    "getStarted": "始める"
+  },
+  "hero": {
+    "title": "心の平和を見つけよう",
+    "subtitle": "ストレスを軽減し、幸福感を高める呼吸法と瞑想ガイドを発見しましょう",
+    "cta": "始める",
+    "learnMore": "詳しく見る"
+  },
+  "features": {
+    "title": "機能",
+    "subtitle": "穏やかな生活に必要なすべて",
+    "videos": {
+      "title": "ガイド付きビデオ",
+      "description": "瞑想と呼吸のビデオセッション"
+    },
+    "audio": {
+      "title": "リラックス音声",
+      "description": "自然の音とリラックス音楽"
+    },
+    "guides": {
+      "title": "テキストガイド",
+      "description": "詳細な手順と実用的なヒント"
+    },
+    "progress": {
+      "title": "進捗を追跡",
+      "description": "時間の経過とともに成長を監視"
+    }
+  },
+  "pricing": {
+    "title": "シンプルな料金",
+    "subtitle": "すべてのコンテンツへの永久アクセス",
+    "promotion": "プロモーション",
+    "originalPrice": "€10",
+    "currentPrice": "€4",
+    "promotionalPrice": "プロモーション価格",
+    "offerEnds": "オファー終了まで：",
+    "features": {
+      "allVideos": "すべてのビデオへのアクセス",
+      "unlimitedAudio": "無制限のリラックス音声",
+      "textGuides": "パーソナライズされたテキストガイド",
+      "emailSupport": "メールサポート",
+      "freeUpdates": "無料アップデート"
+    },
+    "cta": "今すぐ支払う - €4",
+    "oneTime": "一回払い。隠れた料金なし。"
+  },
+  "auth": {
+    "welcomeBack": "おかえりなさい",
+    "createAccount": "アカウント作成",
+    "loginSubtitle": "コンテンツにアクセスするにはログインしてください",
+    "registerSubtitle": "旅を始めるためにアカウントを作成してください",
+    "fullName": "氏名",
+    "fullNamePlaceholder": "お名前",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "••••••••",
+    "loginButton": "ログイン",
+    "registerButton": "アカウント作成",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "registerLink": "登録",
+    "loginLink": "ログイン",
+    "backToHome": "← ホームに戻る"
+  },
+  "payment": {
+    "hello": "こんにちは",
+    "completePayment": "支払いを完了してすべてのコンテンツにアクセスしてください。",
+    "paymentConfirmed": "支払い確認済み！",
+    "paymentConfirmedDesc": "ご購入ありがとうございます。確認中...",
+    "paymentCanceled": "支払いがキャンセルされました",
+    "paymentCanceledDesc": "いつでも再試行できます。",
+    "processing": "処理中...",
+    "payNow": "今すぐ支払う - €4",
+    "backToHome": "← ホームに戻る",
+    "errorTitle": "エラー",
+    "errorDesc": "支払いを開始できませんでした。もう一度お試しください。"
+  },
+  "dashboard": {
+    "title": "あなたの平和な空間",
+    "welcome": "ようこそ",
+    "tabs": {
+      "videos": "ビデオ",
+      "audio": "オーディオ",
+      "guides": "ガイド"
+    },
+    "videos": {
+      "title": "瞑想ビデオ",
+      "description": "瞑想と呼吸のガイドセッションを探索してください。",
+      "placeholder": "ビデオコンテンツは近日公開..."
+    },
+    "audio": {
+      "title": "リラックス音声",
+      "description": "自然の音とアンビエント音楽でリラックス。",
+      "placeholder": "オーディオコンテンツは近日公開..."
+    },
+    "guides": {
+      "title": "実践ガイド",
+      "description": "練習のための詳細な手順。",
+      "placeholder": "ガイドコンテンツは近日公開..."
+    }
+  },
+  "admin": {
+    "title": "管理ダッシュボード",
+    "stats": {
+      "totalUsers": "総ユーザー数",
+      "totalRevenue": "総収益",
+      "paidUsers": "有料ユーザー",
+      "conversionRate": "コンバージョン率"
+    },
+    "recentPayments": "最近の支払い",
+    "table": {
+      "user": "ユーザー",
+      "amount": "金額",
+      "status": "ステータス",
+      "date": "日付"
+    },
+    "noPayments": "支払いの記録がありません"
+  },
+  "footer": {
+    "copyright": "著作権 © 2026 Calm Breath"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "おっと！ページが見つかりません",
+    "backHome": "ホームに戻る"
+  }
+}

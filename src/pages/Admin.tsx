@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Users, CreditCard, TrendingUp, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import logo from "@/assets/calm-breath-logo.png";
 
 interface AdminStats {
@@ -30,6 +32,7 @@ interface AdminStats {
 }
 
 const Admin = () => {
+  const { t } = useTranslation();
   const { user, isAdmin, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState<AdminStats | null>(null);
@@ -51,7 +54,6 @@ const Admin = () => {
 
   const fetchStats = async () => {
     try {
-      // Fetch all profiles (admin can see all)
       const { data: profiles, error: profilesError } = await supabase
         .from("profiles")
         .select("*")
@@ -59,7 +61,6 @@ const Admin = () => {
 
       if (profilesError) throw profilesError;
 
-      // Fetch all payments (admin can see all)
       const { data: payments, error: paymentsError } = await supabase
         .from("payments")
         .select("*")
@@ -73,7 +74,6 @@ const Admin = () => {
         ?.filter(p => p.status === "succeeded")
         .reduce((sum, p) => sum + (p.amount / 100), 0) || 0;
 
-      // Get recent payments with user emails
       const recentPayments = (payments?.slice(0, 10) || []).map(payment => {
         const userProfile = profiles?.find(p => p.user_id === payment.user_id);
         return {
@@ -121,12 +121,15 @@ const Admin = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
               <img src={logo} alt="Calm Breath" className="w-10 h-10" />
-              <span className="text-xl font-bold text-foreground">Admin Panel</span>
+              <span className="text-xl font-bold text-foreground">{t("admin.title")}</span>
             </div>
-            <Button variant="outline" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar ao Dashboard
-            </Button>
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              <Button variant="outline" onClick={() => navigate("/dashboard")}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                {t("nav.dashboard")}
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -136,39 +139,39 @@ const Admin = () => {
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Total Utilizadores</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("admin.stats.totalUsers")}</CardTitle>
               <Users className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats?.totalUsers || 0}</div>
               <p className="text-xs text-muted-foreground">
-                {stats?.paidUsers || 0} pagaram
+                {stats?.paidUsers || 0} {t("admin.stats.paidUsers").toLowerCase()}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Utilizadores Pagos</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("admin.stats.paidUsers")}</CardTitle>
               <CreditCard className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats?.paidUsers || 0}</div>
               <p className="text-xs text-muted-foreground">
-                {stats?.totalUsers ? Math.round((stats.paidUsers / stats.totalUsers) * 100) : 0}% de conversão
+                {stats?.totalUsers ? Math.round((stats.paidUsers / stats.totalUsers) * 100) : 0}% {t("admin.stats.conversionRate").toLowerCase()}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("admin.stats.totalRevenue")}</CardTitle>
               <TrendingUp className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats?.totalRevenue?.toFixed(2) || "0.00"}€</div>
               <p className="text-xs text-muted-foreground">
-                Pagamentos confirmados
+                {t("common.success")}
               </p>
             </CardContent>
           </Card>
@@ -179,16 +182,16 @@ const Admin = () => {
           {/* Recent Users */}
           <Card>
             <CardHeader>
-              <CardTitle>Utilizadores Recentes</CardTitle>
-              <CardDescription>Os últimos 10 registos</CardDescription>
+              <CardTitle>{t("admin.stats.totalUsers")}</CardTitle>
+              <CardDescription>10 {t("common.previous").toLowerCase()}</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Pagou</TableHead>
+                    <TableHead>{t("common.email")}</TableHead>
+                    <TableHead>{t("common.name")}</TableHead>
+                    <TableHead>{t("admin.table.status")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -198,7 +201,7 @@ const Admin = () => {
                       <TableCell>{user.full_name || "-"}</TableCell>
                       <TableCell>
                         <Badge variant={user.has_paid ? "default" : "secondary"}>
-                          {user.has_paid ? "Sim" : "Não"}
+                          {user.has_paid ? t("common.success") : "No"}
                         </Badge>
                       </TableCell>
                     </TableRow>
@@ -206,7 +209,7 @@ const Admin = () => {
                   {(!stats?.recentUsers || stats.recentUsers.length === 0) && (
                     <TableRow>
                       <TableCell colSpan={3} className="text-center text-muted-foreground">
-                        Nenhum utilizador registado
+                        {t("admin.noPayments")}
                       </TableCell>
                     </TableRow>
                   )}
@@ -218,16 +221,16 @@ const Admin = () => {
           {/* Recent Payments */}
           <Card>
             <CardHeader>
-              <CardTitle>Pagamentos Recentes</CardTitle>
-              <CardDescription>Os últimos 10 pagamentos</CardDescription>
+              <CardTitle>{t("admin.recentPayments")}</CardTitle>
+              <CardDescription>10 {t("common.previous").toLowerCase()}</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Valor</TableHead>
-                    <TableHead>Estado</TableHead>
+                    <TableHead>{t("admin.table.user")}</TableHead>
+                    <TableHead>{t("admin.table.amount")}</TableHead>
+                    <TableHead>{t("admin.table.status")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -246,10 +249,10 @@ const Admin = () => {
                           }
                         >
                           {payment.status === "succeeded"
-                            ? "Pago"
+                            ? t("common.success")
                             : payment.status === "pending"
-                            ? "Pendente"
-                            : "Falhou"}
+                            ? t("common.loading")
+                            : t("common.error")}
                         </Badge>
                       </TableCell>
                     </TableRow>
@@ -257,7 +260,7 @@ const Admin = () => {
                   {(!stats?.recentPayments || stats.recentPayments.length === 0) && (
                     <TableRow>
                       <TableCell colSpan={3} className="text-center text-muted-foreground">
-                        Nenhum pagamento registado
+                        {t("admin.noPayments")}
                       </TableCell>
                     </TableRow>
                   )}

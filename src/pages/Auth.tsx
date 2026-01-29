@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,16 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import logo from "@/assets/calm-breath-logo.png";
 import { z } from "zod";
 
-const authSchema = z.object({
-  email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
-  password: z.string().min(6, "Password deve ter pelo menos 6 caracteres").max(128, "Password muito longa"),
-  fullName: z.string().trim().max(100, "Nome muito longo").optional(),
-});
-
 const Auth = () => {
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +24,12 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { signIn, signUp, user } = useAuth();
+
+  const authSchema = z.object({
+    email: z.string().trim().email(t("common.error")).max(255),
+    password: z.string().min(6).max(128),
+    fullName: z.string().trim().max(100).optional(),
+  });
 
   useEffect(() => {
     if (user) {
@@ -46,7 +49,6 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      // Validate inputs
       const validation = authSchema.safeParse({
         email,
         password,
@@ -55,7 +57,7 @@ const Auth = () => {
 
       if (!validation.success) {
         toast({
-          title: "Erro de validação",
+          title: t("common.error"),
           description: validation.error.errors[0].message,
           variant: "destructive",
         });
@@ -67,24 +69,22 @@ const Auth = () => {
         const { error } = await signIn(email, password);
         if (error) {
           toast({
-            title: "Erro ao entrar",
-            description: error.message === "Invalid login credentials" 
-              ? "Email ou password incorretos" 
-              : error.message,
+            title: t("common.error"),
+            description: error.message,
             variant: "destructive",
           });
         } else {
           toast({
-            title: "Bem-vindo de volta!",
-            description: "Login efetuado com sucesso.",
+            title: t("auth.welcomeBack"),
+            description: t("common.success"),
           });
           navigate("/dashboard");
         }
       } else {
         if (!fullName.trim()) {
           toast({
-            title: "Erro",
-            description: "Por favor, insere o teu nome.",
+            title: t("common.error"),
+            description: t("auth.fullName"),
             variant: "destructive",
           });
           setIsLoading(false);
@@ -94,22 +94,22 @@ const Auth = () => {
         const { error } = await signUp(email, password, fullName);
         if (error) {
           toast({
-            title: "Erro ao criar conta",
+            title: t("common.error"),
             description: error.message,
             variant: "destructive",
           });
         } else {
           toast({
-            title: "Conta criada!",
-            description: "Podes agora fazer login.",
+            title: t("common.success"),
+            description: t("auth.welcomeBack"),
           });
           setIsLogin(true);
         }
       }
     } catch (error) {
       toast({
-        title: "Erro",
-        description: "Algo correu mal. Tenta novamente.",
+        title: t("common.error"),
+        description: t("common.error"),
         variant: "destructive",
       });
     } finally {
@@ -119,29 +119,30 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <img src={logo} alt="Calm Breath" className="w-16 h-16" />
           </div>
           <CardTitle className="text-2xl">
-            {isLogin ? "Entrar" : "Criar Conta"}
+            {isLogin ? t("auth.welcomeBack") : t("auth.createAccount")}
           </CardTitle>
           <CardDescription>
-            {isLogin
-              ? "Entra na tua conta para aceder ao conteúdo"
-              : "Cria uma conta para começar a tua jornada"}
+            {isLogin ? t("auth.loginSubtitle") : t("auth.registerSubtitle")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="fullName">Nome Completo</Label>
+                <Label htmlFor="fullName">{t("auth.fullName")}</Label>
                 <Input
                   id="fullName"
                   type="text"
-                  placeholder="O teu nome"
+                  placeholder={t("auth.fullNamePlaceholder")}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required={!isLogin}
@@ -151,11 +152,11 @@ const Auth = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("common.email")}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="o.teu@email.com"
+                placeholder={t("auth.emailPlaceholder")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -164,12 +165,12 @@ const Auth = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t("common.password")}</Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
+                  placeholder={t("auth.passwordPlaceholder")}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -190,25 +191,25 @@ const Auth = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  A processar...
+                  {t("common.loading")}
                 </>
               ) : isLogin ? (
-                "Entrar"
+                t("auth.loginButton")
               ) : (
-                "Criar Conta"
+                t("auth.registerButton")
               )}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">
-              {isLogin ? "Ainda não tens conta?" : "Já tens conta?"}{" "}
+              {isLogin ? t("auth.noAccount") : t("auth.hasAccount")}{" "}
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-primary hover:underline font-medium"
               >
-                {isLogin ? "Criar conta" : "Entrar"}
+                {isLogin ? t("auth.registerLink") : t("auth.loginLink")}
               </button>
             </p>
           </div>
@@ -219,7 +220,7 @@ const Auth = () => {
               onClick={() => navigate("/")}
               className="text-sm text-muted-foreground hover:text-foreground"
             >
-              ← Voltar à página inicial
+              {t("auth.backToHome")}
             </button>
           </div>
         </CardContent>

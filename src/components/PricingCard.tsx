@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -6,15 +7,16 @@ import { CountdownTimer } from "./CountdownTimer";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const PricingCard = () => {
+  const { t } = useTranslation();
   const { user, profile, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const features = [
-    "Acesso a todos os vídeos",
-    "Áudios relaxantes ilimitados",
-    "Guias de texto personalizados",
-    "Suporte via email",
-    "Atualizações gratuitas",
+    t("pricing.features.allVideos"),
+    t("pricing.features.unlimitedAudio"),
+    t("pricing.features.textGuides"),
+    t("pricing.features.emailSupport"),
+    t("pricing.features.freeUpdates"),
   ];
 
   const handleClick = () => {
@@ -29,29 +31,39 @@ export const PricingCard = () => {
     }
   };
 
+  const getButtonText = () => {
+    if (user) {
+      if (profile?.has_paid || isAdmin) {
+        return t("nav.dashboard");
+      }
+      return t("pricing.cta");
+    }
+    return t("hero.cta");
+  };
+
   return (
     <Card className="relative overflow-hidden border-primary/30 shadow-xl max-w-md mx-auto">
       {/* Promo badge */}
       <div className="absolute top-0 right-0 bg-secondary text-secondary-foreground text-sm font-semibold px-4 py-1 rounded-bl-lg">
-        Promoção
+        {t("pricing.promotion")}
       </div>
       
       <CardHeader className="text-center pb-2 pt-8">
-        <h3 className="text-2xl font-bold text-foreground mb-2">Plano Completo</h3>
-        <p className="text-muted-foreground">Acesso total à plataforma</p>
+        <h3 className="text-2xl font-bold text-foreground mb-2">{t("pricing.title")}</h3>
+        <p className="text-muted-foreground">{t("pricing.subtitle")}</p>
         
         <div className="mt-6">
           <div className="flex items-center justify-center gap-3">
-            <span className="text-2xl text-muted-foreground line-through">10€</span>
-            <span className="text-5xl font-bold text-primary">4€</span>
+            <span className="text-2xl text-muted-foreground line-through">{t("pricing.originalPrice")}</span>
+            <span className="text-5xl font-bold text-primary">{t("pricing.currentPrice")}</span>
           </div>
-          <p className="text-sm text-muted-foreground mt-2">Preço promocional</p>
+          <p className="text-sm text-muted-foreground mt-2">{t("pricing.promotionalPrice")}</p>
         </div>
       </CardHeader>
 
       <CardContent className="space-y-6">
         <div className="text-center">
-          <p className="text-sm text-muted-foreground mb-4">Oferta termina em:</p>
+          <p className="text-sm text-muted-foreground mb-4">{t("pricing.offerEnds")}</p>
           <CountdownTimer />
         </div>
 
@@ -71,11 +83,11 @@ export const PricingCard = () => {
           size="lg"
           onClick={handleClick}
         >
-          {user ? (profile?.has_paid || isAdmin ? "Ir para Dashboard" : "Pagar Agora") : "Começar Agora"}
+          {getButtonText()}
         </Button>
         
         <p className="text-xs text-muted-foreground text-center">
-          Pagamento único. Sem taxas escondidas.
+          {t("pricing.oneTime")}
         </p>
       </CardContent>
     </Card>

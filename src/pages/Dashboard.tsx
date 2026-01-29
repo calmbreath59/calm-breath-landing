@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Video, Headphones, BookOpen, Play, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import logo from "@/assets/calm-breath-logo.png";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("videos");
   const { profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
@@ -116,15 +119,16 @@ const Dashboard = () => {
               <span className="text-sm text-muted-foreground hidden sm:block">
                 {profile?.full_name || profile?.email}
               </span>
+              <LanguageSwitcher />
               {isAdmin && (
                 <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>
                   <Shield className="w-4 h-4 mr-2" />
-                  Admin
+                  {t("nav.admin")}
                 </Button>
               )}
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
-                Sair
+                {t("common.logout")}
               </Button>
             </div>
           </div>
@@ -135,10 +139,10 @@ const Dashboard = () => {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              Bem-vindo ao teu espaço de calma
+              {t("dashboard.title")}
             </h1>
             <p className="text-muted-foreground">
-              Explora os nossos vídeos, áudios e guias para encontrar a paz interior.
+              {t("dashboard.welcome")}, {profile?.full_name || profile?.email}
             </p>
           </div>
 
@@ -146,15 +150,15 @@ const Dashboard = () => {
             <TabsList className="grid w-full grid-cols-3 mb-8">
               <TabsTrigger value="videos" className="flex items-center gap-2">
                 <Video className="w-4 h-4" />
-                Vídeos
+                {t("dashboard.tabs.videos")}
               </TabsTrigger>
               <TabsTrigger value="audios" className="flex items-center gap-2">
                 <Headphones className="w-4 h-4" />
-                Áudios
+                {t("dashboard.tabs.audio")}
               </TabsTrigger>
               <TabsTrigger value="guides" className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4" />
-                Guias
+                {t("dashboard.tabs.guides")}
               </TabsTrigger>
             </TabsList>
 
@@ -175,7 +179,7 @@ const Dashboard = () => {
                       <p className="text-muted-foreground text-sm mb-4">{video.description}</p>
                       <Button className="w-full group-hover:bg-primary/90">
                         <Play className="w-4 h-4 mr-2" />
-                        Ver Vídeo
+                        {t("dashboard.tabs.videos")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -202,7 +206,7 @@ const Dashboard = () => {
                       <p className="text-muted-foreground text-sm mb-4">{audio.description}</p>
                       <Button className="w-full group-hover:bg-primary/90">
                         <Play className="w-4 h-4 mr-2" />
-                        Ouvir Áudio
+                        {t("dashboard.tabs.audio")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -229,7 +233,7 @@ const Dashboard = () => {
                       <p className="text-muted-foreground text-sm mb-4">{guide.description}</p>
                       <Button className="w-full group-hover:bg-primary/90">
                         <BookOpen className="w-4 h-4 mr-2" />
-                        Ler Guia
+                        {t("dashboard.tabs.guides")}
                       </Button>
                     </CardContent>
                   </Card>

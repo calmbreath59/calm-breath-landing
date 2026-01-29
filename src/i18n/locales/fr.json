@@ -1,0 +1,154 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "email": "Email",
+    "password": "Mot de passe",
+    "name": "Nom"
+  },
+  "nav": {
+    "home": "Accueil",
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "about": "À propos",
+    "dashboard": "Tableau de bord",
+    "admin": "Admin",
+    "getStarted": "Commencer"
+  },
+  "hero": {
+    "title": "Trouvez votre paix intérieure",
+    "subtitle": "Découvrez des techniques de respiration et de méditation guidée pour réduire le stress et améliorer votre bien-être",
+    "cta": "Commencer",
+    "learnMore": "En savoir plus"
+  },
+  "features": {
+    "title": "Fonctionnalités",
+    "subtitle": "Tout ce dont vous avez besoin pour une vie plus calme",
+    "videos": {
+      "title": "Vidéos guidées",
+      "description": "Séances de méditation et de respiration en vidéo"
+    },
+    "audio": {
+      "title": "Audio relaxant",
+      "description": "Sons de la nature et musique pour se détendre"
+    },
+    "guides": {
+      "title": "Guides texte",
+      "description": "Instructions détaillées et conseils pratiques"
+    },
+    "progress": {
+      "title": "Suivez vos progrès",
+      "description": "Surveillez votre évolution au fil du temps"
+    }
+  },
+  "pricing": {
+    "title": "Tarification simple",
+    "subtitle": "Accès à vie à tout le contenu",
+    "promotion": "Promotion",
+    "originalPrice": "10€",
+    "currentPrice": "4€",
+    "promotionalPrice": "Prix promotionnel",
+    "offerEnds": "L'offre se termine dans :",
+    "features": {
+      "allVideos": "Accès à toutes les vidéos",
+      "unlimitedAudio": "Audio relaxant illimité",
+      "textGuides": "Guides texte personnalisés",
+      "emailSupport": "Support par email",
+      "freeUpdates": "Mises à jour gratuites"
+    },
+    "cta": "Payer maintenant - 4€",
+    "oneTime": "Paiement unique. Aucun frais caché."
+  },
+  "auth": {
+    "welcomeBack": "Bon retour",
+    "createAccount": "Créer un compte",
+    "loginSubtitle": "Connectez-vous pour accéder à votre contenu",
+    "registerSubtitle": "Créez un compte pour commencer votre voyage",
+    "fullName": "Nom complet",
+    "fullNamePlaceholder": "Votre nom",
+    "emailPlaceholder": "votre@email.com",
+    "passwordPlaceholder": "••••••••",
+    "loginButton": "Se connecter",
+    "registerButton": "Créer un compte",
+    "noAccount": "Pas encore de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "registerLink": "S'inscrire",
+    "loginLink": "Se connecter",
+    "backToHome": "← Retour à l'accueil"
+  },
+  "payment": {
+    "hello": "Bonjour",
+    "completePayment": "Complétez votre paiement pour accéder à tout le contenu.",
+    "paymentConfirmed": "Paiement confirmé !",
+    "paymentConfirmedDesc": "Merci pour votre achat. Vérification en cours...",
+    "paymentCanceled": "Paiement annulé",
+    "paymentCanceledDesc": "Vous pouvez réessayer quand vous voulez.",
+    "processing": "Traitement...",
+    "payNow": "Payer maintenant - 4€",
+    "backToHome": "← Retour à l'accueil",
+    "errorTitle": "Erreur",
+    "errorDesc": "Impossible d'initier le paiement. Veuillez réessayer."
+  },
+  "dashboard": {
+    "title": "Votre espace de paix",
+    "welcome": "Bienvenue",
+    "tabs": {
+      "videos": "Vidéos",
+      "audio": "Audio",
+      "guides": "Guides"
+    },
+    "videos": {
+      "title": "Vidéos de méditation",
+      "description": "Explorez nos séances guidées de méditation et de respiration.",
+      "placeholder": "Contenu vidéo bientôt disponible..."
+    },
+    "audio": {
+      "title": "Audio relaxant",
+      "description": "Sons de la nature et musique ambiante pour se détendre.",
+      "placeholder": "Contenu audio bientôt disponible..."
+    },
+    "guides": {
+      "title": "Guides pratiques",
+      "description": "Instructions détaillées pour vos pratiques.",
+      "placeholder": "Contenu des guides bientôt disponible..."
+    }
+  },
+  "admin": {
+    "title": "Tableau de bord admin",
+    "stats": {
+      "totalUsers": "Total utilisateurs",
+      "totalRevenue": "Revenu total",
+      "paidUsers": "Utilisateurs payants",
+      "conversionRate": "Taux de conversion"
+    },
+    "recentPayments": "Paiements récents",
+    "table": {
+      "user": "Utilisateur",
+      "amount": "Montant",
+      "status": "Statut",
+      "date": "Date"
+    },
+    "noPayments": "Aucun paiement enregistré"
+  },
+  "footer": {
+    "copyright": "Copyright © 2026 Calm Breath"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oups ! Page non trouvée",
+    "backHome": "Retour à l'accueil"
+  }
+}

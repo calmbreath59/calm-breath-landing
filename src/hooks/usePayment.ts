@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -7,6 +8,7 @@ export const usePayment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { refreshProfile } = useAuth();
+  const { t } = useTranslation();
 
   const initiatePayment = async (email?: string) => {
     setIsLoading(true);
@@ -23,8 +25,8 @@ export const usePayment = () => {
     } catch (error: unknown) {
       console.error("Payment error:", error);
       toast({
-        title: "Erro",
-        description: "Não foi possível iniciar o pagamento. Tenta novamente.",
+        title: t("payment.errorTitle"),
+        description: t("payment.errorDesc"),
         variant: "destructive",
       });
     } finally {

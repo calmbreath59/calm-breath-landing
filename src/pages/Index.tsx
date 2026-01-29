@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Video, Headphones, BookOpen, MessageSquare, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
@@ -9,34 +10,35 @@ import { useAuth } from "@/contexts/AuthContext";
 import heroImage from "@/assets/hero-calm.jpg";
 
 const Index = () => {
+  const { t } = useTranslation();
   const { user, profile } = useAuth();
   const navigate = useNavigate();
 
   const features = [
     {
       icon: Video,
-      title: "Vídeos Educativos",
-      description: "Aprende técnicas comprovadas para gerir a ansiedade através de vídeos explicativos e práticos.",
+      title: t("features.videos.title"),
+      description: t("features.videos.description"),
     },
     {
       icon: Headphones,
-      title: "Áudios Relaxantes",
-      description: "Sons calmantes e meditações guiadas para te ajudar a relaxar em momentos de stress.",
+      title: t("features.audio.title"),
+      description: t("features.audio.description"),
     },
     {
       icon: BookOpen,
-      title: "Guias de Texto",
-      description: "Leituras breves e práticas com dicas simples que podes aplicar no teu dia-a-dia.",
+      title: t("features.guides.title"),
+      description: t("features.guides.description"),
     },
     {
       icon: MessageSquare,
       title: "Feedback",
-      description: "Partilha a tua experiência e ajuda-nos a melhorar continuamente os nossos conteúdos.",
+      description: t("features.progress.description"),
     },
     {
       icon: Sparkles,
-      title: "Fácil de Usar",
-      description: "Interface intuitiva desenhada para que possas focar-te no que realmente importa.",
+      title: t("features.progress.title"),
+      description: t("features.progress.description"),
     },
   ];
 
@@ -50,6 +52,16 @@ const Index = () => {
     } else {
       navigate("/auth?mode=signup");
     }
+  };
+
+  const getButtonText = () => {
+    if (user) {
+      if (profile?.has_paid) {
+        return t("nav.dashboard");
+      }
+      return t("pricing.cta");
+    }
+    return t("hero.cta");
   };
 
   return (
@@ -67,20 +79,17 @@ const Index = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Respira Fundo.{" "}
-              <span className="text-primary">Encontra a Calma.</span>
+              {t("hero.title")}
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed">
-              O Calm Breath é a tua ferramenta para lidar com a ansiedade. 
-              Oferecemos vídeos, áudios relaxantes e guias práticos para te ajudar 
-              a encontrar paz no teu dia-a-dia.
+              {t("hero.subtitle")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="text-lg px-8 py-6" onClick={handleGetStarted}>
-                {user ? (profile?.has_paid ? "Ir para Dashboard" : "Completar Pagamento") : "Começar Agora"}
+                {getButtonText()}
               </Button>
               <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                Saber Mais
+                {t("hero.learnMore")}
               </Button>
             </div>
           </div>
@@ -92,10 +101,10 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Tudo o que precisas para encontrar a calma
+              {t("features.subtitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ferramentas pensadas para te ajudar a gerir a ansiedade de forma simples e eficaz.
+              {t("features.subtitle")}
             </p>
           </div>
           
@@ -114,21 +123,10 @@ const Index = () => {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                  Porquê o Calm Breath?
+                  {t("hero.title")}
                 </h2>
                 <div className="space-y-4 text-muted-foreground">
-                  <p>
-                    A ansiedade afeta milhões de pessoas em todo o mundo. 
-                    Sabemos como pode ser difícil encontrar ajuda acessível e prática.
-                  </p>
-                  <p>
-                    O Calm Breath nasceu da necessidade de criar uma ferramenta simples, 
-                    mas poderosa, que ajude qualquer pessoa a encontrar momentos de paz.
-                  </p>
-                  <p>
-                    Com vídeos educativos, áudios relaxantes e guias práticos, 
-                    oferecemos-te um companheiro para os momentos mais difíceis.
-                  </p>
+                  <p>{t("hero.subtitle")}</p>
                 </div>
               </div>
               <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10">
@@ -138,8 +136,8 @@ const Index = () => {
                       <span className="text-2xl font-bold text-primary">1</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground">Escolhe o teu conteúdo</h4>
-                      <p className="text-sm text-muted-foreground">Vídeo, áudio ou texto</p>
+                      <h4 className="font-semibold text-foreground">{t("features.videos.title")}</h4>
+                      <p className="text-sm text-muted-foreground">{t("features.videos.description")}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -147,8 +145,8 @@ const Index = () => {
                       <span className="text-2xl font-bold text-primary">2</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground">Pratica regularmente</h4>
-                      <p className="text-sm text-muted-foreground">Poucos minutos por dia</p>
+                      <h4 className="font-semibold text-foreground">{t("features.audio.title")}</h4>
+                      <p className="text-sm text-muted-foreground">{t("features.audio.description")}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -156,8 +154,8 @@ const Index = () => {
                       <span className="text-2xl font-bold text-primary">3</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground">Sente a diferença</h4>
-                      <p className="text-sm text-muted-foreground">Mais calma no dia-a-dia</p>
+                      <h4 className="font-semibold text-foreground">{t("features.guides.title")}</h4>
+                      <p className="text-sm text-muted-foreground">{t("features.guides.description")}</p>
                     </div>
                   </div>
                 </div>
@@ -172,10 +170,10 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Começa a tua jornada hoje
+              {t("pricing.title")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Aproveita o preço promocional e obtém acesso completo a todas as funcionalidades.
+              {t("pricing.subtitle")}
             </p>
           </div>
           
