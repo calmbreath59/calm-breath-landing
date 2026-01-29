@@ -1,0 +1,154 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "search": "Suchen",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "name": "Name"
+  },
+  "nav": {
+    "home": "Startseite",
+    "features": "Funktionen",
+    "pricing": "Preise",
+    "about": "Über uns",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "getStarted": "Jetzt starten"
+  },
+  "hero": {
+    "title": "Finde deinen inneren Frieden",
+    "subtitle": "Entdecke Atemtechniken und geführte Meditation, um Stress abzubauen und dein Wohlbefinden zu verbessern",
+    "cta": "Jetzt starten",
+    "learnMore": "Mehr erfahren"
+  },
+  "features": {
+    "title": "Funktionen",
+    "subtitle": "Alles, was du für ein ruhigeres Leben brauchst",
+    "videos": {
+      "title": "Geführte Videos",
+      "description": "Meditations- und Atemsitzungen als Video"
+    },
+    "audio": {
+      "title": "Entspannende Audios",
+      "description": "Naturgeräusche und Musik zum Entspannen"
+    },
+    "guides": {
+      "title": "Textanleitungen",
+      "description": "Detaillierte Anweisungen und praktische Tipps"
+    },
+    "progress": {
+      "title": "Fortschritt verfolgen",
+      "description": "Überwache deine Entwicklung im Laufe der Zeit"
+    }
+  },
+  "pricing": {
+    "title": "Einfache Preise",
+    "subtitle": "Lebenslanger Zugang zu allen Inhalten",
+    "promotion": "Aktion",
+    "originalPrice": "10€",
+    "currentPrice": "4€",
+    "promotionalPrice": "Aktionspreis",
+    "offerEnds": "Angebot endet in:",
+    "features": {
+      "allVideos": "Zugang zu allen Videos",
+      "unlimitedAudio": "Unbegrenzte entspannende Audios",
+      "textGuides": "Personalisierte Textanleitungen",
+      "emailSupport": "E-Mail-Support",
+      "freeUpdates": "Kostenlose Updates"
+    },
+    "cta": "Jetzt zahlen - 4€",
+    "oneTime": "Einmalige Zahlung. Keine versteckten Gebühren."
+  },
+  "auth": {
+    "welcomeBack": "Willkommen zurück",
+    "createAccount": "Konto erstellen",
+    "loginSubtitle": "Melde dich an, um auf deine Inhalte zuzugreifen",
+    "registerSubtitle": "Erstelle ein Konto, um deine Reise zu beginnen",
+    "fullName": "Vollständiger Name",
+    "fullNamePlaceholder": "Dein Name",
+    "emailPlaceholder": "deine@email.de",
+    "passwordPlaceholder": "••••••••",
+    "loginButton": "Anmelden",
+    "registerButton": "Konto erstellen",
+    "noAccount": "Noch kein Konto?",
+    "hasAccount": "Bereits ein Konto?",
+    "registerLink": "Registrieren",
+    "loginLink": "Anmelden",
+    "backToHome": "← Zurück zur Startseite"
+  },
+  "payment": {
+    "hello": "Hallo",
+    "completePayment": "Schließe deine Zahlung ab, um auf alle Inhalte zuzugreifen.",
+    "paymentConfirmed": "Zahlung bestätigt!",
+    "paymentConfirmedDesc": "Danke für deinen Kauf. Wird überprüft...",
+    "paymentCanceled": "Zahlung abgebrochen",
+    "paymentCanceledDesc": "Du kannst es jederzeit erneut versuchen.",
+    "processing": "Wird verarbeitet...",
+    "payNow": "Jetzt zahlen - 4€",
+    "backToHome": "← Zurück zur Startseite",
+    "errorTitle": "Fehler",
+    "errorDesc": "Zahlung konnte nicht gestartet werden. Bitte versuche es erneut."
+  },
+  "dashboard": {
+    "title": "Dein Friedensraum",
+    "welcome": "Willkommen",
+    "tabs": {
+      "videos": "Videos",
+      "audio": "Audio",
+      "guides": "Anleitungen"
+    },
+    "videos": {
+      "title": "Meditationsvideos",
+      "description": "Entdecke unsere geführten Meditations- und Atemsitzungen.",
+      "placeholder": "Videoinhalte kommen bald..."
+    },
+    "audio": {
+      "title": "Entspannende Audios",
+      "description": "Naturgeräusche und Ambient-Musik zum Entspannen.",
+      "placeholder": "Audioinhalte kommen bald..."
+    },
+    "guides": {
+      "title": "Praktische Anleitungen",
+      "description": "Detaillierte Anweisungen für deine Praktiken.",
+      "placeholder": "Anleitungsinhalte kommen bald..."
+    }
+  },
+  "admin": {
+    "title": "Admin-Dashboard",
+    "stats": {
+      "totalUsers": "Gesamte Benutzer",
+      "totalRevenue": "Gesamtumsatz",
+      "paidUsers": "Zahlende Benutzer",
+      "conversionRate": "Konversionsrate"
+    },
+    "recentPayments": "Letzte Zahlungen",
+    "table": {
+      "user": "Benutzer",
+      "amount": "Betrag",
+      "status": "Status",
+      "date": "Datum"
+    },
+    "noPayments": "Keine Zahlungen registriert"
+  },
+  "footer": {
+    "copyright": "Copyright © 2026 Calm Breath"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Seite nicht gefunden",
+    "backHome": "Zur Startseite"
+  }
+}
