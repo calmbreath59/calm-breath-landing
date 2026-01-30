@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Users, CreditCard, TrendingUp, ArrowLeft, Loader2 } from "lucide-react";
+import { Users, CreditCard, TrendingUp, ArrowLeft, Loader2, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -125,6 +125,10 @@ const Admin = () => {
             </div>
             <div className="flex items-center gap-2">
               <LanguageSwitcher />
+              <Button variant="outline" onClick={() => navigate("/admin/users")}>
+                <UserCog className="w-4 h-4 mr-2" />
+                {t("admin.manageUsers")}
+              </Button>
               <Button variant="outline" onClick={() => navigate("/dashboard")}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 {t("nav.dashboard")}

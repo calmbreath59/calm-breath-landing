@@ -10,6 +10,8 @@ interface Profile {
   stripe_customer_id: string | null;
   has_paid: boolean;
   email_verified: boolean;
+  is_banned: boolean;
+  avatar_url: string | null;
   created_at: string;
   updated_at: string;
 }
