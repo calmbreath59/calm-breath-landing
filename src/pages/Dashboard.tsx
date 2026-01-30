@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Video, Headphones, BookOpen, Play, LogOut, Shield } from "lucide-react";
+import { Video, Headphones, BookOpen, Play, LogOut, Shield, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -120,6 +120,9 @@ const Dashboard = () => {
                 {profile?.full_name || profile?.email}
               </span>
               <LanguageSwitcher />
+              <Button variant="ghost" size="icon" onClick={() => navigate("/settings")}>
+                <Settings className="w-4 h-4" />
+              </Button>
               {isAdmin && (
                 <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>
                   <Shield className="w-4 h-4 mr-2" />

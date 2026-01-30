@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Check, Loader2 } from "lucide-react";
@@ -12,11 +12,12 @@ import { useToast } from "@/hooks/use-toast";
 
 const Payment = () => {
   const { t } = useTranslation();
-  const { user, profile, isLoading: authLoading, refreshProfile } = useAuth();
-  const { initiatePayment, isLoading: paymentLoading } = usePayment();
+  const { user, profile, isLoading: authLoading } = useAuth();
+  const { initiatePayment, verifyPayment, isLoading: paymentLoading } = usePayment();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
+  const hasVerified = useRef(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -32,24 +33,35 @@ const Payment = () => {
 
   useEffect(() => {
     const paymentStatus = searchParams.get("payment");
-    if (paymentStatus === "success") {
+    
+    if (paymentStatus === "success" && !hasVerified.current) {
+      hasVerified.current = true;
+      
       toast({
         title: t("payment.paymentConfirmed"),
         description: t("payment.paymentConfirmedDesc"),
       });
-      const checkPayment = async () => {
+      
+      // Verify payment and redirect to dashboard
+      const checkAndRedirect = async () => {
+        // Wait a bit for Stripe to process
         await new Promise(resolve => setTimeout(resolve, 2000));
-        await refreshProfile();
+        const hasPaid = await verifyPayment();
+        if (hasPaid) {
+          navigate("/dashboard");
+        }
       };
-      checkPayment();
+      checkAndRedirect();
     } else if (paymentStatus === "canceled") {
       toast({
         title: t("payment.paymentCanceled"),
         description: t("payment.paymentCanceledDesc"),
         variant: "destructive",
       });
+      // Clear the URL params
+      navigate("/payment", { replace: true });
     }
-  }, [searchParams, refreshProfile, toast, t]);
+  }, [searchParams, verifyPayment, toast, t, navigate]);
 
   const features = [
     t("pricing.features.allVideos"),

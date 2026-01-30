@@ -73,34 +73,43 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
+          banned_at: string | null
           created_at: string | null
           email: string
           email_verified: boolean | null
           full_name: string | null
           has_paid: boolean | null
           id: string
+          is_banned: boolean | null
           stripe_customer_id: string | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          avatar_url?: string | null
+          banned_at?: string | null
           created_at?: string | null
           email: string
           email_verified?: boolean | null
           full_name?: string | null
           has_paid?: boolean | null
           id?: string
+          is_banned?: boolean | null
           stripe_customer_id?: string | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          avatar_url?: string | null
+          banned_at?: string | null
           created_at?: string | null
           email?: string
           email_verified?: boolean | null
           full_name?: string | null
           has_paid?: boolean | null
           id?: string
+          is_banned?: boolean | null
           stripe_customer_id?: string | null
           updated_at?: string | null
           user_id?: string
