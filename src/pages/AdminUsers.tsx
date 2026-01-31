@@ -205,13 +205,13 @@ const AdminUsers = () => {
 
     setActionLoading(targetUser.id);
     try {
-      // Delete from profiles (user_roles will cascade if FK set up)
-      const { error } = await supabase
-        .from("profiles")
-        .delete()
-        .eq("user_id", targetUser.user_id);
+      // Call edge function to delete user from auth.users (requires service role)
+      const { data, error } = await supabase.functions.invoke("delete-user", {
+        body: { user_id: targetUser.user_id },
+      });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
       setUsers((prev) => prev.filter((u) => u.id !== targetUser.id));
 
@@ -219,11 +219,11 @@ const AdminUsers = () => {
         title: t("common.success"),
         description: t("adminUsers.userDeleted"),
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting user:", error);
       toast({
         title: t("common.error"),
-        description: t("adminUsers.actionError"),
+        description: error.message || t("adminUsers.actionError"),
         variant: "destructive",
       });
     } finally {

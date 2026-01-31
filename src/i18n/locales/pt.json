@@ -87,7 +87,21 @@
     "hasAccount": "Já tens conta?",
     "registerLink": "Regista-te",
     "loginLink": "Entra aqui",
-    "backToHome": "← Voltar à página inicial"
+    "backToHome": "← Voltar à página inicial",
+    "verifyEmail": "Verificar Email",
+    "verifyEmailDesc": "Enviámos um código de verificação para {{email}}",
+    "verifyButton": "Verificar",
+    "verificationRequired": "Verificação necessária",
+    "verificationSent": "Enviámos um código de verificação para o teu email",
+    "verificationError": "Erro ao enviar email de verificação",
+    "accountCreated": "Conta criada",
+    "emailVerified": "Email verificado com sucesso",
+    "invalidCode": "Código de verificação inválido",
+    "noCodeReceived": "Não recebeste o código?",
+    "resendCode": "Reenviar código",
+    "codeSent": "Novo código enviado",
+    "backToLogin": "← Voltar ao login",
+    "devModeCode": "Modo de desenvolvimento - Código:"
   },
   "payment": {
     "hello": "Olá",
@@ -124,6 +138,62 @@
       "title": "Guias Práticos",
       "description": "Instruções detalhadas para as tuas práticas.",
       "placeholder": "Conteúdo de guias em breve..."
+    },
+    "content": {
+      "videos": {
+        "breathing": {
+          "title": "Técnicas de Respiração para Ansiedade",
+          "description": "Aprende técnicas de respiração que ajudam a acalmar em momentos de stress."
+        },
+        "meditation": {
+          "title": "Meditação Guiada para Iniciantes",
+          "description": "Uma meditação suave para quem está a começar a praticar mindfulness."
+        },
+        "panic": {
+          "title": "Como Gerir Ataques de Pânico",
+          "description": "Estratégias práticas para lidar com ataques de pânico quando acontecem."
+        },
+        "grounding": {
+          "title": "Exercícios de Grounding",
+          "description": "Técnicas para te ancorar ao presente e reduzir a ansiedade."
+        }
+      },
+      "audio": {
+        "forest": {
+          "title": "Sons da Natureza - Floresta",
+          "description": "Sons relaxantes de uma floresta tranquila."
+        },
+        "sleep": {
+          "title": "Meditação para Dormir",
+          "description": "Áudio guiado para te ajudar a adormecer."
+        },
+        "ambient": {
+          "title": "Música Ambiente Calma",
+          "description": "Música suave para relaxar durante o dia."
+        },
+        "breathing478": {
+          "title": "Respiração 4-7-8",
+          "description": "Exercício de respiração guiado para acalmar."
+        }
+      },
+      "guides": {
+        "morning": {
+          "title": "5 Dicas para Começar o Dia Sem Ansiedade",
+          "description": "Rotinas matinais que ajudam a começar o dia com calma."
+        },
+        "triggers": {
+          "title": "Como Identificar os Gatilhos da Ansiedade",
+          "description": "Aprende a reconhecer o que desencadeia a tua ansiedade."
+        },
+        "gratitude": {
+          "title": "Técnica do Diário de Gratidão",
+          "description": "Como usar a gratidão para melhorar o bem-estar mental."
+        },
+        "nutrition": {
+          "title": "Alimentação e Ansiedade",
+          "description": "Como a alimentação pode influenciar os níveis de ansiedade."
+        }
+      }
     }
   },
   "admin": {

@@ -23,29 +23,29 @@ const Dashboard = () => {
   const videos = [
     {
       id: 1,
-      title: "Técnicas de Respiração para Ansiedade",
-      description: "Aprende técnicas de respiração que ajudam a acalmar em momentos de stress.",
+      titleKey: "dashboard.content.videos.breathing.title",
+      descriptionKey: "dashboard.content.videos.breathing.description",
       duration: "12:34",
       thumbnail: "🧘",
     },
     {
       id: 2,
-      title: "Meditação Guiada para Iniciantes",
-      description: "Uma meditação suave para quem está a começar a praticar mindfulness.",
+      titleKey: "dashboard.content.videos.meditation.title",
+      descriptionKey: "dashboard.content.videos.meditation.description",
       duration: "15:00",
       thumbnail: "🧠",
     },
     {
       id: 3,
-      title: "Como Gerir Ataques de Pânico",
-      description: "Estratégias práticas para lidar com ataques de pânico quando acontecem.",
+      titleKey: "dashboard.content.videos.panic.title",
+      descriptionKey: "dashboard.content.videos.panic.description",
       duration: "18:22",
       thumbnail: "💪",
     },
     {
       id: 4,
-      title: "Exercícios de Grounding",
-      description: "Técnicas para te ancorar ao presente e reduzir a ansiedade.",
+      titleKey: "dashboard.content.videos.grounding.title",
+      descriptionKey: "dashboard.content.videos.grounding.description",
       duration: "10:15",
       thumbnail: "🌱",
     },
@@ -54,26 +54,26 @@ const Dashboard = () => {
   const audios = [
     {
       id: 1,
-      title: "Sons da Natureza - Floresta",
-      description: "Sons relaxantes de uma floresta tranquila.",
+      titleKey: "dashboard.content.audio.forest.title",
+      descriptionKey: "dashboard.content.audio.forest.description",
       duration: "30:00",
     },
     {
       id: 2,
-      title: "Meditação para Dormir",
-      description: "Áudio guiado para te ajudar a adormecer.",
+      titleKey: "dashboard.content.audio.sleep.title",
+      descriptionKey: "dashboard.content.audio.sleep.description",
       duration: "25:00",
     },
     {
       id: 3,
-      title: "Música Ambiente Calma",
-      description: "Música suave para relaxar durante o dia.",
+      titleKey: "dashboard.content.audio.ambient.title",
+      descriptionKey: "dashboard.content.audio.ambient.description",
       duration: "45:00",
     },
     {
       id: 4,
-      title: "Respiração 4-7-8",
-      description: "Exercício de respiração guiado para acalmar.",
+      titleKey: "dashboard.content.audio.breathing478.title",
+      descriptionKey: "dashboard.content.audio.breathing478.description",
       duration: "10:00",
     },
   ];
@@ -81,26 +81,26 @@ const Dashboard = () => {
   const guides = [
     {
       id: 1,
-      title: "5 Dicas para Começar o Dia Sem Ansiedade",
-      description: "Rotinas matinais que ajudam a começar o dia com calma.",
+      titleKey: "dashboard.content.guides.morning.title",
+      descriptionKey: "dashboard.content.guides.morning.description",
       readTime: "3 min",
     },
     {
       id: 2,
-      title: "Como Identificar os Gatilhos da Ansiedade",
-      description: "Aprende a reconhecer o que desencadeia a tua ansiedade.",
+      titleKey: "dashboard.content.guides.triggers.title",
+      descriptionKey: "dashboard.content.guides.triggers.description",
       readTime: "5 min",
     },
     {
       id: 3,
-      title: "Técnica do Diário de Gratidão",
-      description: "Como usar a gratidão para melhorar o bem-estar mental.",
+      titleKey: "dashboard.content.guides.gratitude.title",
+      descriptionKey: "dashboard.content.guides.gratitude.description",
       readTime: "4 min",
     },
     {
       id: 4,
-      title: "Alimentação e Ansiedade",
-      description: "Como a alimentação pode influenciar os níveis de ansiedade.",
+      titleKey: "dashboard.content.guides.nutrition.title",
+      descriptionKey: "dashboard.content.guides.nutrition.description",
       readTime: "6 min",
     },
   ];
@@ -176,10 +176,10 @@ const Dashboard = () => {
                           {video.duration}
                         </span>
                       </div>
-                      <CardTitle className="text-lg">{video.title}</CardTitle>
+                      <CardTitle className="text-lg">{t(video.titleKey)}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground text-sm mb-4">{video.description}</p>
+                      <p className="text-muted-foreground text-sm mb-4">{t(video.descriptionKey)}</p>
                       <Button className="w-full group-hover:bg-primary/90">
                         <Play className="w-4 h-4 mr-2" />
                         {t("dashboard.tabs.videos")}
@@ -203,10 +203,10 @@ const Dashboard = () => {
                           {audio.duration}
                         </span>
                       </div>
-                      <CardTitle className="text-lg mt-2">{audio.title}</CardTitle>
+                      <CardTitle className="text-lg mt-2">{t(audio.titleKey)}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground text-sm mb-4">{audio.description}</p>
+                      <p className="text-muted-foreground text-sm mb-4">{t(audio.descriptionKey)}</p>
                       <Button className="w-full group-hover:bg-primary/90">
                         <Play className="w-4 h-4 mr-2" />
                         {t("dashboard.tabs.audio")}
@@ -230,10 +230,10 @@ const Dashboard = () => {
                           {guide.readTime}
                         </span>
                       </div>
-                      <CardTitle className="text-lg mt-2">{guide.title}</CardTitle>
+                      <CardTitle className="text-lg mt-2">{t(guide.titleKey)}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground text-sm mb-4">{guide.description}</p>
+                      <p className="text-muted-foreground text-sm mb-4">{t(guide.descriptionKey)}</p>
                       <Button className="w-full group-hover:bg-primary/90">
                         <BookOpen className="w-4 h-4 mr-2" />
                         {t("dashboard.tabs.guides")}

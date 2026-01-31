@@ -87,7 +87,21 @@
     "hasAccount": "Already have an account?",
     "registerLink": "Sign up",
     "loginLink": "Sign in",
-    "backToHome": "← Back to home"
+    "backToHome": "← Back to home",
+    "verifyEmail": "Verify Email",
+    "verifyEmailDesc": "We sent a verification code to {{email}}",
+    "verifyButton": "Verify",
+    "verificationRequired": "Verification required",
+    "verificationSent": "We sent a verification code to your email",
+    "verificationError": "Error sending verification email",
+    "accountCreated": "Account created",
+    "emailVerified": "Email verified successfully",
+    "invalidCode": "Invalid verification code",
+    "noCodeReceived": "Didn't receive the code?",
+    "resendCode": "Resend code",
+    "codeSent": "New code sent",
+    "backToLogin": "← Back to login",
+    "devModeCode": "Development mode - Code:"
   },
   "payment": {
     "hello": "Hello",
@@ -124,6 +138,62 @@
       "title": "Practical Guides",
       "description": "Detailed instructions for your practices.",
       "placeholder": "Guide content coming soon..."
+    },
+    "content": {
+      "videos": {
+        "breathing": {
+          "title": "Breathing Techniques for Anxiety",
+          "description": "Learn breathing techniques that help calm you during stressful moments."
+        },
+        "meditation": {
+          "title": "Guided Meditation for Beginners",
+          "description": "A gentle meditation for those starting to practice mindfulness."
+        },
+        "panic": {
+          "title": "How to Manage Panic Attacks",
+          "description": "Practical strategies to deal with panic attacks when they happen."
+        },
+        "grounding": {
+          "title": "Grounding Exercises",
+          "description": "Techniques to anchor yourself in the present and reduce anxiety."
+        }
+      },
+      "audio": {
+        "forest": {
+          "title": "Nature Sounds - Forest",
+          "description": "Relaxing sounds from a peaceful forest."
+        },
+        "sleep": {
+          "title": "Sleep Meditation",
+          "description": "Guided audio to help you fall asleep."
+        },
+        "ambient": {
+          "title": "Calm Ambient Music",
+          "description": "Soft music to relax during the day."
+        },
+        "breathing478": {
+          "title": "4-7-8 Breathing",
+          "description": "Guided breathing exercise to calm down."
+        }
+      },
+      "guides": {
+        "morning": {
+          "title": "5 Tips to Start the Day Without Anxiety",
+          "description": "Morning routines that help start the day calmly."
+        },
+        "triggers": {
+          "title": "How to Identify Anxiety Triggers",
+          "description": "Learn to recognize what triggers your anxiety."
+        },
+        "gratitude": {
+          "title": "Gratitude Journal Technique",
+          "description": "How to use gratitude to improve mental well-being."
+        },
+        "nutrition": {
+          "title": "Food and Anxiety",
+          "description": "How food can influence anxiety levels."
+        }
+      }
     }
   },
   "admin": {

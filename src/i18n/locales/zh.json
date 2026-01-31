@@ -87,7 +87,21 @@
     "hasAccount": "已有账户？",
     "registerLink": "注册",
     "loginLink": "登录",
-    "backToHome": "← 返回首页"
+    "backToHome": "← 返回首页",
+    "verifyEmail": "验证邮箱",
+    "verifyEmailDesc": "我们已向 {{email}} 发送验证码",
+    "verifyButton": "验证",
+    "verificationRequired": "需要验证",
+    "verificationSent": "我们已向您的邮箱发送验证码",
+    "verificationError": "发送验证邮件时出错",
+    "accountCreated": "账户已创建",
+    "emailVerified": "邮箱验证成功",
+    "invalidCode": "验证码无效",
+    "noCodeReceived": "没有收到验证码？",
+    "resendCode": "重新发送",
+    "codeSent": "新验证码已发送",
+    "backToLogin": "← 返回登录",
+    "devModeCode": "开发模式 - 验证码："
   },
   "payment": {
     "hello": "您好",
@@ -124,6 +138,62 @@
       "title": "实用指南",
       "description": "练习的详细说明。",
       "placeholder": "指南内容即将推出..."
+    },
+    "content": {
+      "videos": {
+        "breathing": {
+          "title": "焦虑呼吸技巧",
+          "description": "学习有助于在压力时刻平静的呼吸技巧。"
+        },
+        "meditation": {
+          "title": "初学者引导冥想",
+          "description": "适合开始正念练习的温和冥想。"
+        },
+        "panic": {
+          "title": "如何应对恐慌发作",
+          "description": "应对恐慌发作的实用策略。"
+        },
+        "grounding": {
+          "title": "接地练习",
+          "description": "将自己固定在当下并减少焦虑的技巧。"
+        }
+      },
+      "audio": {
+        "forest": {
+          "title": "自然之声 - 森林",
+          "description": "宁静森林的放松声音。"
+        },
+        "sleep": {
+          "title": "睡眠冥想",
+          "description": "帮助入睡的引导音频。"
+        },
+        "ambient": {
+          "title": "平静环境音乐",
+          "description": "白天放松的轻柔音乐。"
+        },
+        "breathing478": {
+          "title": "4-7-8呼吸法",
+          "description": "引导呼吸练习来平静心情。"
+        }
+      },
+      "guides": {
+        "morning": {
+          "title": "无焦虑开始一天的5个技巧",
+          "description": "帮助平静开始一天的晨间例程。"
+        },
+        "triggers": {
+          "title": "如何识别焦虑触发因素",
+          "description": "学习识别是什么触发了你的焦虑。"
+        },
+        "gratitude": {
+          "title": "感恩日记技巧",
+          "description": "如何用感恩改善心理健康。"
+        },
+        "nutrition": {
+          "title": "饮食与焦虑",
+          "description": "饮食如何影响焦虑水平。"
+        }
+      }
     }
   },
   "admin": {
