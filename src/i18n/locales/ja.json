@@ -87,7 +87,21 @@
     "hasAccount": "すでにアカウントをお持ちですか？",
     "registerLink": "登録",
     "loginLink": "ログイン",
-    "backToHome": "← ホームに戻る"
+    "backToHome": "← ホームに戻る",
+    "verifyEmail": "メール確認",
+    "verifyEmailDesc": "{{email}} に確認コードを送信しました",
+    "verifyButton": "確認",
+    "verificationRequired": "確認が必要です",
+    "verificationSent": "メールに確認コードを送信しました",
+    "verificationError": "確認メールの送信エラー",
+    "accountCreated": "アカウント作成完了",
+    "emailVerified": "メール確認成功",
+    "invalidCode": "無効な確認コード",
+    "noCodeReceived": "コードを受け取っていませんか？",
+    "resendCode": "コードを再送信",
+    "codeSent": "新しいコードを送信しました",
+    "backToLogin": "← ログインに戻る",
+    "devModeCode": "開発モード - コード："
   },
   "payment": {
     "hello": "こんにちは",
@@ -124,6 +138,62 @@
       "title": "実践ガイド",
       "description": "練習のための詳細な手順。",
       "placeholder": "ガイドコンテンツは近日公開..."
+    },
+    "content": {
+      "videos": {
+        "breathing": {
+          "title": "不安のための呼吸テクニック",
+          "description": "ストレス時に落ち着くための呼吸法を学びます。"
+        },
+        "meditation": {
+          "title": "初心者向けガイド付き瞑想",
+          "description": "マインドフルネスを始める方への優しい瞑想。"
+        },
+        "panic": {
+          "title": "パニック発作の対処法",
+          "description": "パニック発作に対処するための実践的な戦略。"
+        },
+        "grounding": {
+          "title": "グラウンディングエクササイズ",
+          "description": "今に留まり不安を軽減するテクニック。"
+        }
+      },
+      "audio": {
+        "forest": {
+          "title": "自然の音 - 森",
+          "description": "静かな森のリラックスできる音。"
+        },
+        "sleep": {
+          "title": "睡眠瞑想",
+          "description": "眠りにつくためのガイド付き音声。"
+        },
+        "ambient": {
+          "title": "穏やかなアンビエント音楽",
+          "description": "日中のリラックスのための優しい音楽。"
+        },
+        "breathing478": {
+          "title": "4-7-8呼吸法",
+          "description": "落ち着くためのガイド付き呼吸エクササイズ。"
+        }
+      },
+      "guides": {
+        "morning": {
+          "title": "不安なく一日を始める5つのヒント",
+          "description": "穏やかに一日を始めるための朝のルーティン。"
+        },
+        "triggers": {
+          "title": "不安のトリガーを特定する方法",
+          "description": "何があなたの不安を引き起こすかを認識する。"
+        },
+        "gratitude": {
+          "title": "感謝日記テクニック",
+          "description": "感謝を使って精神的な健康を改善する方法。"
+        },
+        "nutrition": {
+          "title": "食事と不安",
+          "description": "食事が不安レベルに与える影響。"
+        }
+      }
     }
   },
   "admin": {

@@ -87,7 +87,21 @@
     "hasAccount": "Bereits ein Konto?",
     "registerLink": "Registrieren",
     "loginLink": "Anmelden",
-    "backToHome": "← Zurück zur Startseite"
+    "backToHome": "← Zurück zur Startseite",
+    "verifyEmail": "E-Mail verifizieren",
+    "verifyEmailDesc": "Wir haben einen Verifizierungscode an {{email}} gesendet",
+    "verifyButton": "Verifizieren",
+    "verificationRequired": "Verifizierung erforderlich",
+    "verificationSent": "Wir haben einen Verifizierungscode an deine E-Mail gesendet",
+    "verificationError": "Fehler beim Senden der Verifizierungs-E-Mail",
+    "accountCreated": "Konto erstellt",
+    "emailVerified": "E-Mail erfolgreich verifiziert",
+    "invalidCode": "Ungültiger Verifizierungscode",
+    "noCodeReceived": "Keinen Code erhalten?",
+    "resendCode": "Code erneut senden",
+    "codeSent": "Neuer Code gesendet",
+    "backToLogin": "← Zurück zum Login",
+    "devModeCode": "Entwicklungsmodus - Code:"
   },
   "payment": {
     "hello": "Hallo",
@@ -124,6 +138,62 @@
       "title": "Praktische Anleitungen",
       "description": "Detaillierte Anweisungen für deine Praktiken.",
       "placeholder": "Anleitungsinhalte kommen bald..."
+    },
+    "content": {
+      "videos": {
+        "breathing": {
+          "title": "Atemtechniken bei Angst",
+          "description": "Lerne Atemtechniken, die dir in stressigen Momenten helfen."
+        },
+        "meditation": {
+          "title": "Geführte Meditation für Anfänger",
+          "description": "Eine sanfte Meditation für den Einstieg in Achtsamkeit."
+        },
+        "panic": {
+          "title": "Panikattacken bewältigen",
+          "description": "Praktische Strategien für den Umgang mit Panikattacken."
+        },
+        "grounding": {
+          "title": "Erdungsübungen",
+          "description": "Techniken zur Verankerung im Hier und Jetzt."
+        }
+      },
+      "audio": {
+        "forest": {
+          "title": "Naturgeräusche - Wald",
+          "description": "Entspannende Klänge eines friedlichen Waldes."
+        },
+        "sleep": {
+          "title": "Schlafmeditation",
+          "description": "Geführtes Audio zum Einschlafen."
+        },
+        "ambient": {
+          "title": "Ruhige Ambient-Musik",
+          "description": "Sanfte Musik zum Entspannen tagsüber."
+        },
+        "breathing478": {
+          "title": "4-7-8 Atmung",
+          "description": "Geführte Atemübung zur Beruhigung."
+        }
+      },
+      "guides": {
+        "morning": {
+          "title": "5 Tipps für einen angstfreien Start",
+          "description": "Morgenroutinen für einen ruhigen Tagesbeginn."
+        },
+        "triggers": {
+          "title": "Angstauslöser erkennen",
+          "description": "Lerne, was deine Angst auslöst."
+        },
+        "gratitude": {
+          "title": "Dankbarkeitstagebuch-Technik",
+          "description": "Wie Dankbarkeit das mentale Wohlbefinden verbessert."
+        },
+        "nutrition": {
+          "title": "Ernährung und Angst",
+          "description": "Wie Ernährung Angstniveaus beeinflussen kann."
+        }
+      }
     }
   },
   "admin": {

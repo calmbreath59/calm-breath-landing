@@ -87,7 +87,21 @@
     "hasAccount": "Déjà un compte ?",
     "registerLink": "S'inscrire",
     "loginLink": "Se connecter",
-    "backToHome": "← Retour à l'accueil"
+    "backToHome": "← Retour à l'accueil",
+    "verifyEmail": "Vérifier l'email",
+    "verifyEmailDesc": "Nous avons envoyé un code de vérification à {{email}}",
+    "verifyButton": "Vérifier",
+    "verificationRequired": "Vérification requise",
+    "verificationSent": "Nous avons envoyé un code de vérification à votre email",
+    "verificationError": "Erreur lors de l'envoi de l'email de vérification",
+    "accountCreated": "Compte créé",
+    "emailVerified": "Email vérifié avec succès",
+    "invalidCode": "Code de vérification invalide",
+    "noCodeReceived": "Vous n'avez pas reçu le code ?",
+    "resendCode": "Renvoyer le code",
+    "codeSent": "Nouveau code envoyé",
+    "backToLogin": "← Retour à la connexion",
+    "devModeCode": "Mode développement - Code :"
   },
   "payment": {
     "hello": "Bonjour",
@@ -124,6 +138,62 @@
       "title": "Guides pratiques",
       "description": "Instructions détaillées pour vos pratiques.",
       "placeholder": "Contenu des guides bientôt disponible..."
+    },
+    "content": {
+      "videos": {
+        "breathing": {
+          "title": "Techniques de respiration contre l'anxiété",
+          "description": "Apprenez des techniques de respiration pour vous calmer."
+        },
+        "meditation": {
+          "title": "Méditation guidée pour débutants",
+          "description": "Une méditation douce pour débuter la pleine conscience."
+        },
+        "panic": {
+          "title": "Gérer les crises de panique",
+          "description": "Stratégies pratiques pour gérer les crises de panique."
+        },
+        "grounding": {
+          "title": "Exercices d'ancrage",
+          "description": "Techniques pour vous ancrer dans le présent."
+        }
+      },
+      "audio": {
+        "forest": {
+          "title": "Sons de la nature - Forêt",
+          "description": "Sons relaxants d'une forêt paisible."
+        },
+        "sleep": {
+          "title": "Méditation pour dormir",
+          "description": "Audio guidé pour vous aider à vous endormir."
+        },
+        "ambient": {
+          "title": "Musique ambiante calme",
+          "description": "Musique douce pour se détendre pendant la journée."
+        },
+        "breathing478": {
+          "title": "Respiration 4-7-8",
+          "description": "Exercice de respiration guidé pour se calmer."
+        }
+      },
+      "guides": {
+        "morning": {
+          "title": "5 conseils pour une matinée sans anxiété",
+          "description": "Routines matinales pour commencer la journée calmement."
+        },
+        "triggers": {
+          "title": "Identifier les déclencheurs d'anxiété",
+          "description": "Apprenez à reconnaître ce qui déclenche votre anxiété."
+        },
+        "gratitude": {
+          "title": "Technique du journal de gratitude",
+          "description": "Comment utiliser la gratitude pour le bien-être mental."
+        },
+        "nutrition": {
+          "title": "Alimentation et anxiété",
+          "description": "Comment l'alimentation influence les niveaux d'anxiété."
+        }
+      }
     }
   },
   "admin": {
