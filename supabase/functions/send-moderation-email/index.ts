@@ -1,7 +1,14 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
 serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response(null, {status: 204});
+  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
   try {
     const { email, type, reason } = await req.json();
     // Chamada para o endpoint Node/backend (ver src/backendEmail.ts)
@@ -16,8 +23,14 @@ serve(async (req) => {
           : `<h2>Your comment was removed or hidden by an admin.</h2><p>Reason: ${reason}</p>`
       })
     });
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    return new Response(JSON.stringify({ success: true }), { 
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 200 
+    });
+  } catch (e: any) {
+    return new Response(JSON.stringify({ error: e.message }), { 
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500 
+    });
   }
 });
