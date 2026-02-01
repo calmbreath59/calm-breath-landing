@@ -1,5 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { crypto } from "https://deno.land/std@0.190.0/crypto/mod.ts";
+import { encode as encodeHex } from "https://deno.land/std@0.190.0/encoding/hex.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,6 +17,15 @@ interface VerificationRequest {
 
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+async function hashCode(code: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(code);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = new Uint8Array(hashBuffer);
+  const hashHex = new TextDecoder().decode(encodeHex(hashArray));
+  return hashHex;
 }
 
 serve(async (req: Request) => {
@@ -36,8 +47,9 @@ serve(async (req: Request) => {
       throw new Error("email and user_id are required");
     }
 
-    // Generate 6-digit code
+    // Generate 6-digit code and hash it
     const code = generateCode();
+    const hashedCode = await hashCode(code);
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     // Delete any existing codes for this user
@@ -46,12 +58,12 @@ serve(async (req: Request) => {
       .delete()
       .eq("user_id", user_id);
 
-    // Insert new code
+    // Insert hashed code (NOT plaintext)
     const { error: insertError } = await adminClient
       .from("email_verification_codes")
       .insert({
         user_id,
-        code,
+        code: hashedCode, // Store hashed code
         expires_at: expiresAt.toISOString(),
       });
 
