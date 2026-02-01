@@ -123,6 +123,18 @@ const AdminUsers = () => {
 
       if (error) throw error;
 
+      // Dispara email se for banido
+      if (newBanStatus) {
+        await fetch("/api/send-ban-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: targetUser.email,
+            reason: "Violação das regras" // Aqui poderia customizar
+          })
+        });
+      }
+
       setUsers((prev) =>
         prev.map((u) =>
           u.id === targetUser.id ? { ...u, is_banned: newBanStatus } : u
