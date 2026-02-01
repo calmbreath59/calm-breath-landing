@@ -1,5 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { crypto } from "https://deno.land/std@0.190.0/crypto/mod.ts";
+import { encode as encodeHex } from "https://deno.land/std@0.190.0/encoding/hex.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,6 +12,15 @@ const corsHeaders = {
 interface VerifyCodeRequest {
   user_id: string;
   code: string;
+}
+
+async function hashCode(code: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(code);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = new Uint8Array(hashBuffer);
+  const hashHex = new TextDecoder().decode(encodeHex(hashArray));
+  return hashHex;
 }
 
 serve(async (req: Request) => {
@@ -31,12 +42,14 @@ serve(async (req: Request) => {
       throw new Error("user_id and code are required");
     }
 
-    // Get the verification code
+    // Hash the provided code to compare with stored hash
+    const hashedCode = await hashCode(code);
+
+    // Get the verification code by user_id only (we'll compare hashes)
     const { data: codeData, error: fetchError } = await adminClient
       .from("email_verification_codes")
       .select("*")
       .eq("user_id", user_id)
-      .eq("code", code)
       .maybeSingle();
 
     if (fetchError) {
@@ -44,7 +57,8 @@ serve(async (req: Request) => {
       throw new Error("Failed to verify code");
     }
 
-    if (!codeData) {
+    // Check if code exists and hashes match
+    if (!codeData || codeData.code !== hashedCode) {
       return new Response(
         JSON.stringify({ success: false, error: "Invalid verification code" }),
         {
