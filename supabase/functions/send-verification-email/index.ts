@@ -116,43 +116,60 @@ serve(async (req: Request) => {
       throw new Error("Failed to create verification code");
     }
 
-    // Enviar email via API da Vercel (que usa nodemailer com Gmail SMTP)
+    // Enviar email via Resend API (mais simples e confiável para Deno)
     const emailHtml = `<!DOCTYPE html><html><head><style>body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; } .container { max-width: 600px; margin: 0 auto; padding: 20px; } .header { text-align: center; margin-bottom: 30px; } .code { font-size: 32px; font-weight: bold; text-align: center; background: #f5f5f5; padding: 20px; border-radius: 8px; letter-spacing: 8px; margin: 20px 0; } .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }</style></head><body><div class="container"><div class="header"><h1>🧘 Calm Breath</h1></div><p>Hello${full_name ? ` ${full_name}` : ''},</p><p>Welcome to Calm Breath! Please use the code below to verify your email address:</p><div class="code">${code}</div><p>This code will expire in 1 hour.</p><p>If you didn't create an account with Calm Breath, you can safely ignore this email.</p><div class="footer"><p>© 2026 Calm Breath. All rights reserved.</p></div></div></body></html>`;
 
-    try {
-      // Chamar API da Vercel que faz o envio via SMTP Gmail
-      const vercelUrl = Deno.env.get("VERCEL_URL") || "https://calm-breath-landing.vercel.app";
-      const emailServiceUrl = `${vercelUrl}/api/send-email`;
-      
-      const emailResponse = await fetch(emailServiceUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: email,
-          subject: "Verify your email - Calm Breath",
-          html: emailHtml,
-        }),
-      });
-      
-      if (emailResponse.ok) {
-        console.log("Email sent successfully to:", email);
-      } else {
-        const errorText = await emailResponse.text();
-        console.error("Email service error:", errorText);
-        // Log mas não falha - código já foi criado
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    
+    if (resendApiKey) {
+      try {
+        const resendResponse = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "Calm Breath <noreply@calmbreath.app>",
+            to: [email],
+            subject: "Verify your email - Calm Breath",
+            html: emailHtml,
+          }),
+        });
+        
+        const resendData = await resendResponse.json();
+        
+        if (resendResponse.ok) {
+          console.log("Email sent successfully via Resend to:", email);
+        } else {
+          console.error("Resend API error:", resendData);
+          // Fallback: mostrar código no log
+          console.log(`[FALLBACK] Verification code for ${email}: ${code}`);
+        }
+      } catch (resendError) {
+        console.error("Error calling Resend API:", resendError);
+        // Fallback: mostrar código no log
+        console.log(`[FALLBACK] Verification code for ${email}: ${code}`);
       }
-    } catch (emailError) {
-      console.error("Error calling email service:", emailError);
-      // Log mas não falha - código já foi criado
-      // Em dev, mostrar código no console
-      console.log(`[DEV] Verification code for ${email}: ${code}`);
+    } else {
+      // Se não tiver Resend configurado, mostrar código no log
+      console.log(`[DEV] RESEND_API_KEY not configured. Verification code for ${email}: ${code}`);
+      console.log(`[DEV] Configure RESEND_API_KEY in Supabase Edge Functions secrets to send emails`);
+    }
+
+    // Retornar código em dev se Resend não estiver configurado
+    const responseData: any = { 
+      success: true, 
+      message: "Verification email sent",
+    };
+    
+    if (!resendApiKey) {
+      responseData.devCode = code;
+      responseData.message = "Verification code created (email not configured - check logs)";
     }
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: "Verification email sent",
-      }),
+      JSON.stringify(responseData),
       {
         headers: { 
           ...corsHeaders,
