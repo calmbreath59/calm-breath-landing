@@ -27,6 +27,7 @@ const Auth = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [pendingUserId, setPendingUserId] = useState<string | null>(null);
   const [devCode, setDevCode] = useState<string | null>(null);
+  const [isNewRegistration, setIsNewRegistration] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -53,13 +54,31 @@ const Auth = () => {
 
   const sendVerificationEmail = async (userId: string, userEmail: string, userName?: string) => {
     try {
-      const { data, error } = await supabase.functions.invoke("send-verification-email", {
-        body: { user_id: userId, email: userEmail, full_name: userName },
+      // Usar fetch diretamente para evitar problemas de CORS com supabase.functions.invoke
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-verification-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": supabaseKey,
+        },
+        body: JSON.stringify({ 
+          user_id: userId, 
+          email: userEmail, 
+          full_name: userName 
+        }),
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
 
-      // If in dev mode (no Resend configured), show the code
+      const data = await response.json();
+
+      // If in dev mode (no email configured), show the code
       if (data?.devCode) {
         setDevCode(data.devCode);
       }
@@ -113,6 +132,7 @@ const Auth = () => {
             // Sign out and show verification step
             await supabase.auth.signOut();
             setPendingUserId(profile.user_id);
+            setIsNewRegistration(false); // É login, não registro
             await sendVerificationEmail(profile.user_id, email);
             setStep("verify");
             toast({
@@ -151,6 +171,7 @@ const Auth = () => {
           
           if (newUser) {
             setPendingUserId(newUser.id);
+            setIsNewRegistration(true); // É novo registro
             const result = await sendVerificationEmail(newUser.id, email, fullName);
             
             if (result.success) {
@@ -187,11 +208,28 @@ const Auth = () => {
 
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("verify-email-code", {
-        body: { user_id: pendingUserId, code: verificationCode },
+      // Usar fetch diretamente para evitar problemas de CORS
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      
+      const response = await fetch(`${supabaseUrl}/functions/v1/verify-email-code`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": supabaseKey,
+        },
+        body: JSON.stringify({ 
+          user_id: pendingUserId, 
+          code: verificationCode 
+        }),
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
       if (data?.error) throw new Error(data.error);
 
       toast({
@@ -199,11 +237,30 @@ const Auth = () => {
         description: t("auth.emailVerified"),
       });
 
-      // Now user can login
-      setStep("login");
+      // Redirecionar baseado no tipo de ação
+      if (isNewRegistration) {
+        // Novo registro → redirecionar para payment
+        navigate("/payment");
+      } else {
+        // Login → redirecionar para dashboard
+        // Fazer login novamente após verificação
+        const { error: signInError } = await signIn(email, password);
+        if (signInError) {
+          toast({
+            title: t("common.error"),
+            description: signInError.message,
+            variant: "destructive",
+          });
+          setStep("login");
+        } else {
+          navigate("/dashboard");
+        }
+      }
+
       setPendingUserId(null);
       setVerificationCode("");
       setDevCode(null);
+      setIsNewRegistration(false);
     } catch (error: any) {
       toast({
         title: t("common.error"),

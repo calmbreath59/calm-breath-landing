@@ -3,13 +3,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { crypto } from "https://deno.land/std@0.190.0/crypto/mod.ts";
 import { encode as encodeHex } from "https://deno.land/std@0.190.0/encoding/hex.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-  "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
-  "Access-Control-Max-Age": "86400",
-};
+// Helper function to create CORS headers
+function createCorsHeaders(origin: string | null) {
+  return {
+    "Access-Control-Allow-Origin": origin || "*",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version, x-supabase-client-name, x-supabase-client-version, accept, accept-language, content-language, x-requested-with",
+    "Access-Control-Allow-Methods": "POST, OPTIONS, GET, PUT, DELETE, PATCH",
+    "Access-Control-Max-Age": "86400",
+    "Access-Control-Expose-Headers": "content-type, content-length",
+  };
+}
 
 interface VerificationRequest {
   email: string;
@@ -31,7 +34,13 @@ async function hashCode(code: string): Promise<string> {
 }
 
 serve(async (req: Request) => {
+  const origin = req.headers.get("Origin");
+  const corsHeaders = createCorsHeaders(origin);
+
+  // Handle CORS preflight
   if (req.method === "OPTIONS") {
+    console.log("OPTIONS request received, headers:", Object.keys(corsHeaders));
+    console.log("Access-Control-Allow-Headers:", corsHeaders["Access-Control-Allow-Headers"]);
     return new Response(null, { 
       headers: corsHeaders,
       status: 204,
@@ -73,7 +82,10 @@ serve(async (req: Request) => {
             error: `Por favor aguarde mais ${remainingSeconds} segundos antes de pedir novo email.` 
           }),
           {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            headers: { 
+              ...corsHeaders,
+              "Content-Type": "application/json" 
+            },
             status: 429,
           }
         );
@@ -138,7 +150,10 @@ serve(async (req: Request) => {
         message: "Verification email sent",
       }),
       {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { 
+          ...corsHeaders,
+          "Content-Type": "application/json" 
+        },
         status: 200,
       }
     );
@@ -147,7 +162,10 @@ serve(async (req: Request) => {
     return new Response(
       JSON.stringify({ error: error.message }),
       {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { 
+          ...corsHeaders,
+          "Content-Type": "application/json" 
+        },
         status: 500,
       }
     );
