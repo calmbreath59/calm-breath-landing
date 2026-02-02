@@ -1,4 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "npm:resend@2.0.0";
+
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -7,30 +10,56 @@ const corsHeaders = {
   "Access-Control-Max-Age": "86400",
 };
 
-serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+interface ModerationEmailRequest {
+  email: string;
+  type: "ban" | "comment";
+  reason?: string;
+}
+
+serve(async (req: Request) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   try {
-    const { email, type, reason } = await req.json();
-    // Chamada para o endpoint Node/backend (ver src/backendEmail.ts)
-    await fetch(Deno.env.get('EMAIL_HTTP_ENDPOINT'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: email,
-        subject: type === 'ban' ? 'Account Banned - Calm Breath' : 'Your Comment Was Moderated - Calm Breath',
-        html: type === 'ban'
-          ? `<h2>You have been banned.</h2><p>Reason: ${reason}</p><p>If you feel this was a mistake, reply to this email with your request for unban.</p>`
-          : `<h2>Your comment was removed or hidden by an admin.</h2><p>Reason: ${reason}</p>`
-      })
+    const { email, type, reason }: ModerationEmailRequest = await req.json();
+
+    if (!email) {
+      throw new Error("Email is required");
+    }
+
+    const subject = type === "ban" 
+      ? "Account Banned - Calm Breath" 
+      : "Your Comment Was Moderated - Calm Breath";
+
+    const html = type === "ban"
+      ? `<h2>Your account has been banned.</h2><p>Reason: ${reason || "No reason provided"}</p><p>If you believe this was a mistake, please reply to this email to request a review.</p>`
+      : `<h2>Your comment was removed or hidden by an administrator.</h2><p>Reason: ${reason || "No reason provided"}</p>`;
+
+    const emailResponse = await resend.emails.send({
+      from: "Calm Breath <noreply@calmbreath.app>", // Replace with your verified domain
+      to: [email],
+      subject,
+      html,
     });
-    return new Response(JSON.stringify({ success: true }), { 
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200 
-    });
+
+    console.log("Moderation email sent successfully:", emailResponse);
+
+    return new Response(
+      JSON.stringify({ success: true }),
+      { 
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200 
+      }
+    );
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { 
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500 
-    });
+    console.error("Error sending moderation email:", e);
+    return new Response(
+      JSON.stringify({ error: e.message }),
+      { 
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500 
+      }
+    );
   }
 });
