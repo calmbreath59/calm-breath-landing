@@ -285,5 +285,20 @@
     "title": "404",
     "message": "Oops! Página não encontrada",
     "backHome": "Voltar ao Início"
+  },
+  "feedback": {
+    "title": "Enviar Feedback",
+    "description": "Partilha a tua opinião, reporta um problema ou sugere melhorias.",
+    "type": "Tipo de feedback",
+    "problem": "Problema",
+    "result": "Resultado",
+    "suggestion": "Sugestão",
+    "message": "Mensagem",
+    "messagePlaceholder": "Descreve o teu feedback aqui...",
+    "messageRequired": "Por favor, escreve uma mensagem",
+    "send": "Enviar Feedback",
+    "success": "Feedback enviado!",
+    "successDesc": "Obrigado pelo teu feedback. Vamos analisá-lo brevemente.",
+    "error": "Erro ao enviar feedback. Tenta novamente."
   }
 }
