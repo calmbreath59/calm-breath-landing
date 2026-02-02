@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { PricingCard } from "@/components/PricingCard";
+import { FeedbackButton } from "@/components/FeedbackButton";
 import { useAuth } from "@/contexts/AuthContext";
 import heroImage from "@/assets/hero-calm.jpg";
 
@@ -182,6 +183,7 @@ const Index = () => {
       </section>
 
       <Footer />
+      <FeedbackButton />
     </div>
   );
 };

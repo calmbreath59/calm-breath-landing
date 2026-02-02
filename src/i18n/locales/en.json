@@ -285,5 +285,20 @@
     "title": "404",
     "message": "Oops! Page not found",
     "backHome": "Back to Home"
+  },
+  "feedback": {
+    "title": "Send Feedback",
+    "description": "Share your opinion, report a problem, or suggest improvements.",
+    "type": "Feedback type",
+    "problem": "Problem",
+    "result": "Result",
+    "suggestion": "Suggestion",
+    "message": "Message",
+    "messagePlaceholder": "Describe your feedback here...",
+    "messageRequired": "Please write a message",
+    "send": "Send Feedback",
+    "success": "Feedback sent!",
+    "successDesc": "Thank you for your feedback. We will review it shortly.",
+    "error": "Error sending feedback. Please try again."
   }
 }

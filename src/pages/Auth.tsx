@@ -1,20 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Eye, EyeOff, Loader2, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import logo from "@/assets/calm-breath-logo.png";
 import { z } from "zod";
 
-type AuthStep = "login" | "register" | "verify";
+type AuthStep = "login" | "register";
 
 const Auth = () => {
   const { t } = useTranslation();
@@ -24,14 +22,10 @@ const Auth = () => {
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
-  const [pendingUserId, setPendingUserId] = useState<string | null>(null);
-  const [devCode, setDevCode] = useState<string | null>(null);
-  const [isNewRegistration, setIsNewRegistration] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { signIn, signUp, user, refreshProfile } = useAuth();
+  const { signIn, signUp, user } = useAuth();
 
   const authSchema = z.object({
     email: z.string().trim().email(t("common.error")).max(255),
@@ -51,44 +45,6 @@ const Auth = () => {
       setStep("register");
     }
   }, [searchParams]);
-
-  const sendVerificationEmail = async (userId: string, userEmail: string, userName?: string) => {
-    try {
-      // Usar fetch diretamente para evitar problemas de CORS com supabase.functions.invoke
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      
-      const response = await fetch(`${supabaseUrl}/functions/v1/send-verification-email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": supabaseKey,
-        },
-        body: JSON.stringify({ 
-          user_id: userId, 
-          email: userEmail, 
-          full_name: userName 
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
-        throw new Error(errorData.error || `HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      // If in dev mode (no email configured), show the code
-      if (data?.devCode) {
-        setDevCode(data.devCode);
-      }
-
-      return { success: true };
-    } catch (error: any) {
-      console.error("Error sending verification email:", error);
-      return { success: false, error: error.message };
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,7 +68,6 @@ const Auth = () => {
       }
 
       if (step === "login") {
-        // Check if user's email is verified before allowing login
         const { error } = await signIn(email, password);
         if (error) {
           toast({
@@ -121,31 +76,11 @@ const Auth = () => {
             variant: "destructive",
           });
         } else {
-          // Check if email is verified
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("email_verified, user_id")
-            .eq("email", email)
-            .maybeSingle();
-
-          if (profile && !profile.email_verified) {
-            // Sign out and show verification step
-            await supabase.auth.signOut();
-            setPendingUserId(profile.user_id);
-            setIsNewRegistration(false); // É login, não registro
-            await sendVerificationEmail(profile.user_id, email);
-            setStep("verify");
-            toast({
-              title: t("auth.verificationRequired"),
-              description: t("auth.verificationSent"),
-            });
-          } else {
-            toast({
-              title: t("auth.welcomeBack"),
-              description: t("common.success"),
-            });
-            navigate("/dashboard");
-          }
+          toast({
+            title: t("auth.welcomeBack"),
+            description: t("common.success"),
+          });
+          navigate("/dashboard");
         }
       } else if (step === "register") {
         if (!fullName.trim()) {
@@ -166,30 +101,11 @@ const Auth = () => {
             variant: "destructive",
           });
         } else {
-          // Get the newly created user
-          const { data: { user: newUser } } = await supabase.auth.getUser();
-          
-          if (newUser) {
-            setPendingUserId(newUser.id);
-            setIsNewRegistration(true); // É novo registro
-            const result = await sendVerificationEmail(newUser.id, email, fullName);
-            
-            if (result.success) {
-              // Sign out so user can't access app until verified
-              await supabase.auth.signOut();
-              setStep("verify");
-              toast({
-                title: t("auth.accountCreated"),
-                description: t("auth.verificationSent"),
-              });
-            } else {
-              toast({
-                title: t("common.error"),
-                description: t("auth.verificationError"),
-                variant: "destructive",
-              });
-            }
-          }
+          toast({
+            title: t("auth.accountCreated"),
+            description: t("common.success"),
+          });
+          navigate("/payment");
         }
       }
     } catch (error) {
@@ -202,194 +118,6 @@ const Auth = () => {
       setIsLoading(false);
     }
   };
-
-  const handleVerifyCode = async () => {
-    if (!pendingUserId || verificationCode.length !== 6) return;
-
-    setIsLoading(true);
-    try {
-      // Usar fetch diretamente para evitar problemas de CORS
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      
-      const response = await fetch(`${supabaseUrl}/functions/v1/verify-email-code`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": supabaseKey,
-        },
-        body: JSON.stringify({ 
-          user_id: pendingUserId, 
-          code: verificationCode 
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
-        throw new Error(errorData.error || `HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (data?.error) throw new Error(data.error);
-
-      toast({
-        title: t("common.success"),
-        description: t("auth.emailVerified"),
-      });
-
-      // Redirecionar baseado no tipo de ação
-      if (isNewRegistration) {
-        // Novo registro → redirecionar para payment
-        navigate("/payment");
-      } else {
-        // Login → redirecionar para dashboard
-        // Fazer login novamente após verificação
-        const { error: signInError } = await signIn(email, password);
-        if (signInError) {
-          toast({
-            title: t("common.error"),
-            description: signInError.message,
-            variant: "destructive",
-          });
-          setStep("login");
-        } else {
-          navigate("/dashboard");
-        }
-      }
-
-      setPendingUserId(null);
-      setVerificationCode("");
-      setDevCode(null);
-      setIsNewRegistration(false);
-    } catch (error: any) {
-      toast({
-        title: t("common.error"),
-        description: error.message || t("auth.invalidCode"),
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleResendCode = async () => {
-    if (!pendingUserId) return;
-
-    setIsLoading(true);
-    try {
-      const result = await sendVerificationEmail(pendingUserId, email, fullName);
-      if (result.success) {
-        toast({
-          title: t("common.success"),
-          description: t("auth.codeSent"),
-        });
-      } else {
-        throw new Error(result.error);
-      }
-    } catch (error: any) {
-      toast({
-        title: t("common.error"),
-        description: error.message || t("common.error"),
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (step === "verify") {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="absolute top-4 right-4">
-          <LanguageSwitcher />
-        </div>
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <Mail className="w-8 h-8 text-primary" />
-              </div>
-            </div>
-            <CardTitle className="text-2xl">{t("auth.verifyEmail")}</CardTitle>
-            <CardDescription>
-              {t("auth.verifyEmailDesc", { email })}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              {devCode && (
-                <div className="p-4 bg-muted rounded-lg text-center">
-                  <p className="text-xs text-muted-foreground mb-1">{t("auth.devModeCode")}</p>
-                  <p className="text-2xl font-mono font-bold tracking-widest">{devCode}</p>
-                </div>
-              )}
-
-              <div className="flex justify-center">
-                <InputOTP
-                  maxLength={6}
-                  value={verificationCode}
-                  onChange={(value) => setVerificationCode(value)}
-                >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-              </div>
-
-              <Button
-                onClick={handleVerifyCode}
-                className="w-full"
-                disabled={isLoading || verificationCode.length !== 6}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    {t("common.loading")}
-                  </>
-                ) : (
-                  t("auth.verifyButton")
-                )}
-              </Button>
-
-              <div className="text-center space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  {t("auth.noCodeReceived")}
-                </p>
-                <Button
-                  variant="link"
-                  onClick={handleResendCode}
-                  disabled={isLoading}
-                  className="text-sm"
-                >
-                  {t("auth.resendCode")}
-                </Button>
-              </div>
-
-              <div className="text-center">
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setStep("login");
-                    setPendingUserId(null);
-                    setVerificationCode("");
-                    setDevCode(null);
-                  }}
-                  className="text-sm text-muted-foreground"
-                >
-                  {t("auth.backToLogin")}
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
