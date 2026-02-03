@@ -14,6 +14,133 @@ export type Database = {
   }
   public: {
     Tables: {
+      categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          description_translations: Json | null
+          icon: string | null
+          id: string
+          is_visible: boolean | null
+          name: string
+          name_translations: Json | null
+          sort_order: number | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          description_translations?: Json | null
+          icon?: string | null
+          id?: string
+          is_visible?: boolean | null
+          name: string
+          name_translations?: Json | null
+          sort_order?: number | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          description_translations?: Json | null
+          icon?: string | null
+          id?: string
+          is_visible?: boolean | null
+          name?: string
+          name_translations?: Json | null
+          sort_order?: number | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      comment_reports: {
+        Row: {
+          admin_notes: string | null
+          comment_id: string
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          comment_id: string
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          comment_id?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comment_reports_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_hidden_by_admin: boolean | null
+          is_visible: boolean | null
+          media_item_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_hidden_by_admin?: boolean | null
+          is_visible?: boolean | null
+          media_item_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_hidden_by_admin?: boolean | null
+          is_visible?: boolean | null
+          media_item_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_media_item_id_fkey"
+            columns: ["media_item_id"]
+            isOneToOne: false
+            referencedRelation: "media_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_verification_codes: {
         Row: {
           code: string
@@ -34,6 +161,107 @@ export type Database = {
           created_at?: string | null
           expires_at?: string
           id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      media_items: {
+        Row: {
+          category_id: string
+          content: string | null
+          content_translations: Json | null
+          created_at: string
+          description: string | null
+          description_translations: Json | null
+          duration: string | null
+          file_url: string | null
+          id: string
+          is_visible: boolean | null
+          read_time: string | null
+          sort_order: number | null
+          thumbnail_url: string | null
+          title: string
+          title_translations: Json | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          content?: string | null
+          content_translations?: Json | null
+          created_at?: string
+          description?: string | null
+          description_translations?: Json | null
+          duration?: string | null
+          file_url?: string | null
+          id?: string
+          is_visible?: boolean | null
+          read_time?: string | null
+          sort_order?: number | null
+          thumbnail_url?: string | null
+          title: string
+          title_translations?: Json | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          content?: string | null
+          content_translations?: Json | null
+          created_at?: string
+          description?: string | null
+          description_translations?: Json | null
+          duration?: string | null
+          file_url?: string | null
+          id?: string
+          is_visible?: boolean | null
+          read_time?: string | null
+          sort_order?: number | null
+          thumbnail_url?: string | null
+          title?: string
+          title_translations?: Json | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          metadata: Json | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          metadata?: Json | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          metadata?: Json | null
+          title?: string
+          type?: string
           user_id?: string
         }
         Relationships: []

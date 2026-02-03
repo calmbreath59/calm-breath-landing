@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Video, Headphones, BookOpen, Play, LogOut, Shield, Settings } from "lucide-react";
+import { Video, Headphones, BookOpen, LogOut, Shield, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { NotificationBell } from "@/components/NotificationBell";
+import { CategoryList } from "@/components/dashboard/CategoryList";
+import { MediaItemList } from "@/components/dashboard/MediaItemList";
+import { MediaItemViewer } from "@/components/dashboard/MediaItemViewer";
+import { Category, MediaItem } from "@/types/cms";
 import logo from "@/assets/calm-breath-logo.png";
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("videos");
+  const [activeTab, setActiveTab] = useState<"video" | "audio" | "guide">("video");
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
   const { profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -20,90 +26,28 @@ const Dashboard = () => {
     navigate("/");
   };
 
-  const videos = [
-    {
-      id: 1,
-      titleKey: "dashboard.content.videos.breathing.title",
-      descriptionKey: "dashboard.content.videos.breathing.description",
-      duration: "12:34",
-      thumbnail: "🧘",
-    },
-    {
-      id: 2,
-      titleKey: "dashboard.content.videos.meditation.title",
-      descriptionKey: "dashboard.content.videos.meditation.description",
-      duration: "15:00",
-      thumbnail: "🧠",
-    },
-    {
-      id: 3,
-      titleKey: "dashboard.content.videos.panic.title",
-      descriptionKey: "dashboard.content.videos.panic.description",
-      duration: "18:22",
-      thumbnail: "💪",
-    },
-    {
-      id: 4,
-      titleKey: "dashboard.content.videos.grounding.title",
-      descriptionKey: "dashboard.content.videos.grounding.description",
-      duration: "10:15",
-      thumbnail: "🌱",
-    },
-  ];
+  const handleTabChange = (value: string) => {
+    setActiveTab(value as "video" | "audio" | "guide");
+    setSelectedCategory(null);
+    setSelectedItem(null);
+  };
 
-  const audios = [
-    {
-      id: 1,
-      titleKey: "dashboard.content.audio.forest.title",
-      descriptionKey: "dashboard.content.audio.forest.description",
-      duration: "30:00",
-    },
-    {
-      id: 2,
-      titleKey: "dashboard.content.audio.sleep.title",
-      descriptionKey: "dashboard.content.audio.sleep.description",
-      duration: "25:00",
-    },
-    {
-      id: 3,
-      titleKey: "dashboard.content.audio.ambient.title",
-      descriptionKey: "dashboard.content.audio.ambient.description",
-      duration: "45:00",
-    },
-    {
-      id: 4,
-      titleKey: "dashboard.content.audio.breathing478.title",
-      descriptionKey: "dashboard.content.audio.breathing478.description",
-      duration: "10:00",
-    },
-  ];
+  const handleSelectCategory = (category: Category) => {
+    setSelectedCategory(category);
+    setSelectedItem(null);
+  };
 
-  const guides = [
-    {
-      id: 1,
-      titleKey: "dashboard.content.guides.morning.title",
-      descriptionKey: "dashboard.content.guides.morning.description",
-      readTime: "3 min",
-    },
-    {
-      id: 2,
-      titleKey: "dashboard.content.guides.triggers.title",
-      descriptionKey: "dashboard.content.guides.triggers.description",
-      readTime: "5 min",
-    },
-    {
-      id: 3,
-      titleKey: "dashboard.content.guides.gratitude.title",
-      descriptionKey: "dashboard.content.guides.gratitude.description",
-      readTime: "4 min",
-    },
-    {
-      id: 4,
-      titleKey: "dashboard.content.guides.nutrition.title",
-      descriptionKey: "dashboard.content.guides.nutrition.description",
-      readTime: "6 min",
-    },
-  ];
+  const handleSelectItem = (item: MediaItem) => {
+    setSelectedItem(item);
+  };
+
+  const handleBackFromItems = () => {
+    setSelectedCategory(null);
+  };
+
+  const handleBackFromViewer = () => {
+    setSelectedItem(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -119,6 +63,7 @@ const Dashboard = () => {
               <span className="text-sm text-muted-foreground hidden sm:block">
                 {profile?.full_name || profile?.email}
               </span>
+              <NotificationBell />
               <LanguageSwitcher />
               <Button variant="ghost" size="icon" onClick={() => navigate("/settings")}>
                 <Settings className="w-4 h-4" />
@@ -149,101 +94,47 @@ const Dashboard = () => {
             </p>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
-              <TabsTrigger value="videos" className="flex items-center gap-2">
-                <Video className="w-4 h-4" />
-                {t("dashboard.tabs.videos")}
-              </TabsTrigger>
-              <TabsTrigger value="audios" className="flex items-center gap-2">
-                <Headphones className="w-4 h-4" />
-                {t("dashboard.tabs.audio")}
-              </TabsTrigger>
-              <TabsTrigger value="guides" className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4" />
-                {t("dashboard.tabs.guides")}
-              </TabsTrigger>
-            </TabsList>
+          {/* Show viewer if item is selected */}
+          {selectedItem ? (
+            <MediaItemViewer item={selectedItem} onBack={handleBackFromViewer} />
+          ) : selectedCategory ? (
+            /* Show items list if category is selected */
+            <MediaItemList
+              category={selectedCategory}
+              onBack={handleBackFromItems}
+              onSelectItem={handleSelectItem}
+            />
+          ) : (
+            /* Show categories tabs */
+            <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+              <TabsList className="grid w-full grid-cols-3 mb-8">
+                <TabsTrigger value="video" className="flex items-center gap-2">
+                  <Video className="w-4 h-4" />
+                  {t("dashboard.tabs.videos")}
+                </TabsTrigger>
+                <TabsTrigger value="audio" className="flex items-center gap-2">
+                  <Headphones className="w-4 h-4" />
+                  {t("dashboard.tabs.audio")}
+                </TabsTrigger>
+                <TabsTrigger value="guide" className="flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  {t("dashboard.tabs.guides")}
+                </TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="videos">
-              <div className="grid md:grid-cols-2 gap-6">
-                {videos.map((video) => (
-                  <Card key={video.id} className="group hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div className="text-4xl mb-2">{video.thumbnail}</div>
-                        <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded">
-                          {video.duration}
-                        </span>
-                      </div>
-                      <CardTitle className="text-lg">{t(video.titleKey)}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground text-sm mb-4">{t(video.descriptionKey)}</p>
-                      <Button className="w-full group-hover:bg-primary/90">
-                        <Play className="w-4 h-4 mr-2" />
-                        {t("dashboard.tabs.videos")}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
+              <TabsContent value="video">
+                <CategoryList type="video" onSelectCategory={handleSelectCategory} />
+              </TabsContent>
 
-            <TabsContent value="audios">
-              <div className="grid md:grid-cols-2 gap-6">
-                {audios.map((audio) => (
-                  <Card key={audio.id} className="group hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Headphones className="w-6 h-6 text-primary" />
-                        </div>
-                        <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded">
-                          {audio.duration}
-                        </span>
-                      </div>
-                      <CardTitle className="text-lg mt-2">{t(audio.titleKey)}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground text-sm mb-4">{t(audio.descriptionKey)}</p>
-                      <Button className="w-full group-hover:bg-primary/90">
-                        <Play className="w-4 h-4 mr-2" />
-                        {t("dashboard.tabs.audio")}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
+              <TabsContent value="audio">
+                <CategoryList type="audio" onSelectCategory={handleSelectCategory} />
+              </TabsContent>
 
-            <TabsContent value="guides">
-              <div className="grid md:grid-cols-2 gap-6">
-                {guides.map((guide) => (
-                  <Card key={guide.id} className="group hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <BookOpen className="w-6 h-6 text-primary" />
-                        </div>
-                        <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded">
-                          {guide.readTime}
-                        </span>
-                      </div>
-                      <CardTitle className="text-lg mt-2">{t(guide.titleKey)}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground text-sm mb-4">{t(guide.descriptionKey)}</p>
-                      <Button className="w-full group-hover:bg-primary/90">
-                        <BookOpen className="w-4 h-4 mr-2" />
-                        {t("dashboard.tabs.guides")}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="guide">
+                <CategoryList type="guide" onSelectCategory={handleSelectCategory} />
+              </TabsContent>
+            </Tabs>
+          )}
         </div>
       </main>
     </div>
