@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -35,9 +36,31 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Missing required fields");
     }
 
+    // Save feedback to database
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    const { error: insertError } = await supabaseClient
+      .from("feedbacks")
+      .insert({
+        type,
+        message,
+        email: email || null,
+        user_name: userName || null,
+        user_id: userId || null,
+      });
+
+    if (insertError) {
+      console.error("Error saving feedback to database:", insertError);
+    }
+
+    // Send email notification
     const emailResponse = await resend.emails.send({
       from: "Calm Breath Feedback <noreply@calmbreath.app>",
-      to: ["feedback@calmbreath.app"], // Change to your admin email
+      to: ["feedback@calmbreath.app"],
       subject: `${typeLabels[type]} from ${userName || "Anonymous"}`,
       html: `
         <h2>${typeLabels[type]}</h2>

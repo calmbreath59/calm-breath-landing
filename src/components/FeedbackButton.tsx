@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MessageSquareHeart, Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,11 +21,18 @@ export const FeedbackButton = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { user, profile } = useAuth();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [feedbackType, setFeedbackType] = useState<"problem" | "result" | "suggestion">("problem");
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
+
+  // Hide on admin pages
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  if (isAdminRoute) {
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

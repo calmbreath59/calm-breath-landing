@@ -14,6 +14,7 @@ import Payment from "./pages/Payment";
 import Admin from "./pages/Admin";
 import AdminUsers from "./pages/AdminUsers";
 import AdminReports from "./pages/AdminReports";
+import AdminFeedbacks from "./pages/AdminFeedbacks";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -68,6 +69,14 @@ const App = () => (
                 element={
                   <ProtectedRoute requireAdmin>
                     <AdminReports />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/feedbacks"
+                element={
+                  <ProtectedRoute requireAdmin>
+                    <AdminFeedbacks />
                   </ProtectedRoute>
                 }
               />

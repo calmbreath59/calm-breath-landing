@@ -80,6 +80,7 @@ const Auth = () => {
             title: t("auth.welcomeBack"),
             description: t("common.success"),
           });
+          // Will be redirected by ProtectedRoute based on payment status
           navigate("/dashboard");
         }
       } else if (step === "register") {
