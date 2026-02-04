@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Users, ArrowLeft, Loader2, Shield, ShieldOff, Ban, CheckCircle, Trash2, RefreshCw } from "lucide-react";
+import { Users, ArrowLeft, Loader2, Shield, ShieldOff, Ban, CheckCircle, Trash2, RefreshCw, Search, Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -22,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import logo from "@/assets/calm-breath-logo.png";
+import { format } from "date-fns";
 
 interface UserWithRole {
   id: string;
@@ -42,6 +45,14 @@ const AdminUsers = () => {
   const [users, setUsers] = useState<UserWithRole[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  // Filters
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState<string>("");
+  const [paymentFilter, setPaymentFilter] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
 
   useEffect(() => {
     if (!authLoading) {
@@ -100,6 +111,51 @@ const AdminUsers = () => {
     }
   };
 
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setRoleFilter("");
+    setPaymentFilter("");
+    setStatusFilter("");
+    setDateFrom("");
+    setDateTo("");
+  };
+
+  const filteredUsers = users.filter((u) => {
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      if (
+        !u.email.toLowerCase().includes(query) &&
+        !u.full_name?.toLowerCase().includes(query)
+      ) {
+        return false;
+      }
+    }
+
+    // Role filter
+    if (roleFilter && u.role !== roleFilter) {
+      return false;
+    }
+
+    // Payment filter
+    if (paymentFilter === "paid" && !u.has_paid) return false;
+    if (paymentFilter === "unpaid" && u.has_paid) return false;
+
+    // Status filter
+    if (statusFilter === "active" && u.is_banned) return false;
+    if (statusFilter === "banned" && !u.is_banned) return false;
+
+    // Date filter
+    if (dateFrom && u.created_at) {
+      if (new Date(u.created_at) < new Date(dateFrom)) return false;
+    }
+    if (dateTo && u.created_at) {
+      if (new Date(u.created_at) > new Date(dateTo + "T23:59:59")) return false;
+    }
+
+    return true;
+  });
+
   const handleToggleBan = async (targetUser: UserWithRole) => {
     if (targetUser.user_id === user?.id) {
       toast({
@@ -122,18 +178,6 @@ const AdminUsers = () => {
         .eq("user_id", targetUser.user_id);
 
       if (error) throw error;
-
-      // Dispara email se for banido
-      if (newBanStatus) {
-        await fetch("/api/send-ban-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: targetUser.email,
-            reason: "Violação das regras" // Aqui poderia customizar
-          })
-        });
-      }
 
       setUsers((prev) =>
         prev.map((u) =>
@@ -217,7 +261,6 @@ const AdminUsers = () => {
 
     setActionLoading(targetUser.id);
     try {
-      // Call edge function to delete user from auth.users (requires service role)
       const { data, error } = await supabase.functions.invoke("delete-user", {
         body: { user_id: targetUser.user_id },
       });
@@ -275,14 +318,14 @@ const AdminUsers = () => {
       <main className="container mx-auto px-4 py-8">
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="w-5 h-5" />
                   {t("adminUsers.allUsers")}
                 </CardTitle>
                 <CardDescription>
-                  {users.length} {t("adminUsers.usersTotal")}
+                  {filteredUsers.length} {t("adminUsers.usersTotal")}
                 </CardDescription>
               </div>
               <Button variant="outline" onClick={fetchUsers}>
@@ -291,7 +334,70 @@ const AdminUsers = () => {
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            {/* Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 p-4 bg-muted/50 rounded-lg">
+              <div className="relative lg:col-span-2">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder={t("adminUsers.searchUser")}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+
+              <Select value={roleFilter} onValueChange={setRoleFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t("adminUsers.filterRole")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">{t("adminUsers.admin")}</SelectItem>
+                  <SelectItem value="user">{t("adminUsers.user")}</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={paymentFilter} onValueChange={setPaymentFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t("adminUsers.filterPayment")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="paid">{t("common.success")}</SelectItem>
+                  <SelectItem value="unpaid">{t("adminUsers.unpaid")}</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t("adminUsers.filterStatus")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">{t("adminUsers.active")}</SelectItem>
+                  <SelectItem value="banned">{t("adminUsers.banned")}</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                placeholder={t("adminFeedbacks.dateFrom")}
+              />
+
+              <div className="flex gap-2">
+                <Input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  placeholder={t("adminFeedbacks.dateTo")}
+                  className="flex-1"
+                />
+                <Button onClick={handleClearFilters} variant="outline" size="icon">
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -301,11 +407,12 @@ const AdminUsers = () => {
                     <TableHead>{t("adminUsers.role")}</TableHead>
                     <TableHead>{t("adminUsers.status")}</TableHead>
                     <TableHead>{t("adminUsers.payment")}</TableHead>
+                    <TableHead>{t("adminUsers.createdAt")}</TableHead>
                     <TableHead className="text-right">{t("adminUsers.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {users.map((u) => (
+                  {filteredUsers.map((u) => (
                     <TableRow key={u.id} className={u.is_banned ? "opacity-50" : ""}>
                       <TableCell className="font-mono text-sm">{u.email}</TableCell>
                       <TableCell>{u.full_name || "-"}</TableCell>
@@ -326,9 +433,11 @@ const AdminUsers = () => {
                           {u.has_paid ? t("common.success") : t("adminUsers.unpaid")}
                         </Badge>
                       </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {u.created_at ? format(new Date(u.created_at), "dd/MM/yyyy") : "-"}
+                      </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          {/* Toggle Admin */}
                           <Button
                             variant="ghost"
                             size="icon"
@@ -345,7 +454,6 @@ const AdminUsers = () => {
                             )}
                           </Button>
 
-                          {/* Toggle Ban */}
                           <Button
                             variant="ghost"
                             size="icon"
@@ -362,7 +470,6 @@ const AdminUsers = () => {
                             )}
                           </Button>
 
-                          {/* Delete */}
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button
@@ -396,9 +503,9 @@ const AdminUsers = () => {
                       </TableCell>
                     </TableRow>
                   ))}
-                  {users.length === 0 && (
+                  {filteredUsers.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                      <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
                         {t("adminUsers.noUsers")}
                       </TableCell>
                     </TableRow>
