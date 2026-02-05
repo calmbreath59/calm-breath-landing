@@ -22,10 +22,11 @@ const Auth = () => {
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [justRegistered, setJustRegistered] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, user, profile } = useAuth();
 
   const authSchema = z.object({
     email: z.string().trim().email(t("common.error")).max(255),
@@ -33,11 +34,23 @@ const Auth = () => {
     fullName: z.string().trim().max(100).optional(),
   });
 
+  // After registration, redirect to payment
   useEffect(() => {
-    if (user) {
-      navigate("/dashboard");
+    if (user && justRegistered) {
+      navigate("/payment");
     }
-  }, [user, navigate]);
+  }, [user, justRegistered, navigate]);
+
+  // If user is already logged in (not just registered), redirect based on payment status
+  useEffect(() => {
+    if (user && !justRegistered && profile !== null) {
+      if (profile?.has_paid) {
+        navigate("/dashboard");
+      } else {
+        navigate("/payment");
+      }
+    }
+  }, [user, profile, justRegistered, navigate]);
 
   useEffect(() => {
     const mode = searchParams.get("mode");
@@ -76,11 +89,22 @@ const Auth = () => {
             variant: "destructive",
           });
         } else {
+          // Email verification check is disabled for now
+          // TODO: Re-enable when email verification flow is activated
+          // if (!profile?.email_verified) {
+          //   toast({
+          //     title: t("common.error"),
+          //     description: t("auth.emailNotVerified"),
+          //     variant: "destructive",
+          //   });
+          //   return;
+          // }
+
           toast({
             title: t("auth.welcomeBack"),
             description: t("common.success"),
           });
-          // Will be redirected by ProtectedRoute based on payment status
+          // Redirect handled by useEffect based on payment status
           navigate("/dashboard");
         }
       } else if (step === "register") {
@@ -106,7 +130,8 @@ const Auth = () => {
             title: t("auth.accountCreated"),
             description: t("common.success"),
           });
-          navigate("/payment");
+          // Set flag so the useEffect redirects to payment
+          setJustRegistered(true);
         }
       }
     } catch (error) {
