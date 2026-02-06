@@ -357,6 +357,7 @@ const AdminReports = () => {
                     <TableHead>{t("moderation.reason")}</TableHead>
                     <TableHead>{t("moderation.status")}</TableHead>
                     <TableHead>{t("moderation.notes")}</TableHead>
+                    <TableHead>{t("moderation.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
