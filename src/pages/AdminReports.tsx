@@ -154,6 +154,32 @@ const AdminReports = () => {
     setNotesDialogOpen(true);
   };
 
+  const openDeleteReportDialog = (reportId: string) => {
+    setDeletingReportId(reportId);
+    setDeleteReportDialogOpen(true);
+  };
+
+  const handleDeleteReport = async () => {
+    if (!deletingReportId) return;
+    await deleteReport(deletingReportId);
+    setDeleteReportDialogOpen(false);
+    setDeletingReportId(null);
+  };
+
+  const openEditNotesDialog = (reportId: string, currentNotes: string | null) => {
+    setEditingReportId(reportId);
+    setEditNotes(currentNotes || "");
+    setEditNotesDialogOpen(true);
+  };
+
+  const handleEditNotes = async (status: "reviewed" | "dismissed") => {
+    if (!editingReportId) return;
+    await updateReportStatus(editingReportId, status, editNotes);
+    setEditNotesDialogOpen(false);
+    setEditingReportId(null);
+    setEditNotes("");
+  };
+
   const getStatusBadge = (status: string | null) => {
     switch (status) {
       case "reviewed":
