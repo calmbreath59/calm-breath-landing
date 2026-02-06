@@ -11,6 +11,7 @@ interface Profile {
   has_paid: boolean;
   email_verified: boolean;
   is_banned: boolean;
+  banned_at: string | null;
   avatar_url: string | null;
   created_at: string;
   updated_at: string;
