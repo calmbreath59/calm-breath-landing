@@ -56,6 +56,11 @@ const AdminReports = () => {
   const [notesDialogOpen, setNotesDialogOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const [adminNotes, setAdminNotes] = useState("");
+  const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
+  const [deletingReportId, setDeletingReportId] = useState<string | null>(null);
+  const [editingReportId, setEditingReportId] = useState<string | null>(null);
+  const [editNotesDialogOpen, setEditNotesDialogOpen] = useState(false);
+  const [editNotes, setEditNotes] = useState("");
 
   const dateLocale = i18n.language === "pt" ? pt : enUS;
 
