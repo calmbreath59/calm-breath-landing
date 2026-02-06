@@ -161,6 +161,51 @@ export const useCommentReports = () => {
     }
   };
 
+  const deleteReport = async (reportId: string) => {
+    try {
+      const { error } = await supabase
+        .from("comment_reports")
+        .delete()
+        .eq("id", reportId);
+
+      if (error) throw error;
+
+      setReports((prev) => prev.filter((r) => r.id !== reportId));
+      toast({ title: "Report eliminado!" });
+    } catch (error) {
+      console.error("Error deleting report:", error);
+      toast({ title: "Erro ao eliminar report", variant: "destructive" });
+    }
+  };
+
+  const reopenReport = async (reportId: string) => {
+    try {
+      const { error } = await supabase
+        .from("comment_reports")
+        .update({
+          status: "pending",
+          admin_notes: null,
+          reviewed_by: null,
+          reviewed_at: null,
+        })
+        .eq("id", reportId);
+
+      if (error) throw error;
+
+      setReports((prev) =>
+        prev.map((r) =>
+          r.id === reportId
+            ? { ...r, status: "pending" as const, admin_notes: null }
+            : r
+        )
+      );
+      toast({ title: "Report reaberto!" });
+    } catch (error) {
+      console.error("Error reopening report:", error);
+      toast({ title: "Erro ao reabrir report", variant: "destructive" });
+    }
+  };
+
   return {
     reports,
     isLoading,
@@ -168,5 +213,7 @@ export const useCommentReports = () => {
     updateReportStatus,
     hideComment,
     deleteComment,
+    deleteReport,
+    reopenReport,
   };
 };

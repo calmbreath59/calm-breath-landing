@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Flag, Eye, EyeOff, Trash2, Ban, Loader2, CheckCircle, XCircle } from "lucide-react";
+import { ArrowLeft, Flag, Eye, EyeOff, Trash2, Ban, Loader2, CheckCircle, XCircle, RotateCcw, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +44,7 @@ const AdminReports = () => {
   const { t, i18n } = useTranslation();
   const { user, isAdmin, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const { reports, isLoading, updateReportStatus, hideComment, deleteComment, fetchReports } =
+  const { reports, isLoading, updateReportStatus, hideComment, deleteComment, deleteReport, reopenReport, fetchReports } =
     useCommentReports();
   const { createNotification } = useNotifications();
 
@@ -56,6 +56,11 @@ const AdminReports = () => {
   const [notesDialogOpen, setNotesDialogOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const [adminNotes, setAdminNotes] = useState("");
+  const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
+  const [deletingReportId, setDeletingReportId] = useState<string | null>(null);
+  const [editingReportId, setEditingReportId] = useState<string | null>(null);
+  const [editNotesDialogOpen, setEditNotesDialogOpen] = useState(false);
+  const [editNotes, setEditNotes] = useState("");
 
   const dateLocale = i18n.language === "pt" ? pt : enUS;
 
@@ -147,6 +152,32 @@ const AdminReports = () => {
   const openNotesDialog = (reportId: string) => {
     setSelectedReportId(reportId);
     setNotesDialogOpen(true);
+  };
+
+  const openDeleteReportDialog = (reportId: string) => {
+    setDeletingReportId(reportId);
+    setDeleteReportDialogOpen(true);
+  };
+
+  const handleDeleteReport = async () => {
+    if (!deletingReportId) return;
+    await deleteReport(deletingReportId);
+    setDeleteReportDialogOpen(false);
+    setDeletingReportId(null);
+  };
+
+  const openEditNotesDialog = (reportId: string, currentNotes: string | null) => {
+    setEditingReportId(reportId);
+    setEditNotes(currentNotes || "");
+    setEditNotesDialogOpen(true);
+  };
+
+  const handleEditNotes = async (status: "reviewed" | "dismissed") => {
+    if (!editingReportId) return;
+    await updateReportStatus(editingReportId, status, editNotes);
+    setEditNotesDialogOpen(false);
+    setEditingReportId(null);
+    setEditNotes("");
   };
 
   const getStatusBadge = (status: string | null) => {
@@ -326,6 +357,7 @@ const AdminReports = () => {
                     <TableHead>{t("moderation.reason")}</TableHead>
                     <TableHead>{t("moderation.status")}</TableHead>
                     <TableHead>{t("moderation.notes")}</TableHead>
+                    <TableHead>{t("moderation.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -342,6 +374,34 @@ const AdminReports = () => {
                         <p className="text-sm text-muted-foreground max-w-xs truncate">
                           {report.admin_notes || "—"}
                         </p>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openEditNotesDialog(report.id, report.admin_notes)}
+                            title={t("moderation.edit")}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => reopenReport(report.id)}
+                            title={t("moderation.reopen")}
+                          >
+                            <RotateCcw className="w-4 h-4 text-primary" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openDeleteReportDialog(report.id)}
+                            title={t("common.delete")}
+                          >
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -412,6 +472,52 @@ const AdminReports = () => {
               {t("moderation.dismiss")}
             </Button>
             <Button onClick={() => handleReviewReport("reviewed")}>
+              <CheckCircle className="w-4 h-4 mr-2" />
+              {t("moderation.markReviewed")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Report Dialog */}
+      <AlertDialog open={deleteReportDialogOpen} onOpenChange={setDeleteReportDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("moderation.deleteReport")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("moderation.deleteReportConfirm")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteReport}
+              className="bg-destructive text-destructive-foreground"
+            >
+              {t("common.delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Edit Notes Dialog */}
+      <Dialog open={editNotesDialogOpen} onOpenChange={setEditNotesDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("moderation.editReport")}</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            value={editNotes}
+            onChange={(e) => setEditNotes(e.target.value)}
+            placeholder={t("moderation.notesPlaceholder")}
+            className="min-h-[100px]"
+          />
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => handleEditNotes("dismissed")}>
+              <XCircle className="w-4 h-4 mr-2" />
+              {t("moderation.dismiss")}
+            </Button>
+            <Button onClick={() => handleEditNotes("reviewed")}>
               <CheckCircle className="w-4 h-4 mr-2" />
               {t("moderation.markReviewed")}
             </Button>

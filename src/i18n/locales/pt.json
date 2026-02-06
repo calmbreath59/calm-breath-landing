@@ -426,6 +426,11 @@
     "reviewReport": "Analisar Report",
     "notesPlaceholder": "Notas sobre a decisão...",
     "dismiss": "Descartar",
-    "markReviewed": "Marcar como Analisado"
+    "markReviewed": "Marcar como Analisado",
+    "deleteReport": "Eliminar Report",
+    "deleteReportConfirm": "Tens a certeza que queres eliminar este report? Esta ação não pode ser desfeita.",
+    "reopen": "Reabrir",
+    "edit": "Editar",
+    "editReport": "Editar Report"
   }
 }
