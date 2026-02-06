@@ -15,7 +15,9 @@ import Admin from "./pages/Admin";
 import AdminUsers from "./pages/AdminUsers";
 import AdminReports from "./pages/AdminReports";
 import AdminFeedbacks from "./pages/AdminFeedbacks";
+import AdminAppeals from "./pages/AdminAppeals";
 import Settings from "./pages/Settings";
+import Banned from "./pages/Banned";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
