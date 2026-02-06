@@ -15,7 +15,9 @@ import Admin from "./pages/Admin";
 import AdminUsers from "./pages/AdminUsers";
 import AdminReports from "./pages/AdminReports";
 import AdminFeedbacks from "./pages/AdminFeedbacks";
+import AdminAppeals from "./pages/AdminAppeals";
 import Settings from "./pages/Settings";
+import Banned from "./pages/Banned";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -80,6 +82,15 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/admin/appeals"
+                element={
+                  <ProtectedRoute requireAdmin>
+                    <AdminAppeals />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/banned" element={<Banned />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

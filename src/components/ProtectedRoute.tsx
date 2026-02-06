@@ -27,6 +27,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/auth" replace />;
   }
 
+  // Redirect banned users to banned page (unless they're trying to access it)
+  if (profile?.is_banned) {
+    return <Navigate to="/banned" replace />;
+  }
+
   if (requireAdmin && !isAdmin) {
     return <Navigate to="/dashboard" replace />;
   }
