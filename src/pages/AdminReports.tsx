@@ -375,6 +375,34 @@ const AdminReports = () => {
                           {report.admin_notes || "—"}
                         </p>
                       </TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openEditNotesDialog(report.id, report.admin_notes)}
+                            title={t("moderation.edit")}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => reopenReport(report.id)}
+                            title={t("moderation.reopen")}
+                          >
+                            <RotateCcw className="w-4 h-4 text-primary" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openDeleteReportDialog(report.id)}
+                            title={t("common.delete")}
+                          >
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
