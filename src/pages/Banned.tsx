@@ -92,6 +92,10 @@ const Banned = () => {
                 {t("banned.bannedOn")}: {format(new Date(profile.banned_at), "PPP")}
               </p>
             )}
+          </CardHeader>
+        </Card>
+
+        {!hasPendingAppeal && (
           <Card>
             <CardHeader>
               <CardTitle>{t("banned.submitAppeal")}</CardTitle>
@@ -150,7 +154,7 @@ const Banned = () => {
 
         <div className="text-center">
           <Button variant="outline" onClick={signOut}>
-            {t("common.signOut")}
+            {t("common.logout")}
           </Button>
         </div>
       </div>
