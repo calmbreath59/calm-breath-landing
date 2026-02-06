@@ -92,10 +92,6 @@ const Banned = () => {
                 {t("banned.bannedOn")}: {format(new Date(profile.banned_at), "PPP")}
               </p>
             )}
-          </CardHeader>
-        </Card>
-
-        {!hasPendingAppeal && (
           <Card>
             <CardHeader>
               <CardTitle>{t("banned.submitAppeal")}</CardTitle>
