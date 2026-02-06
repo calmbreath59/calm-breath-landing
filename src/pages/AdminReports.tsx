@@ -478,6 +478,52 @@ const AdminReports = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Report Dialog */}
+      <AlertDialog open={deleteReportDialogOpen} onOpenChange={setDeleteReportDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("moderation.deleteReport")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("moderation.deleteReportConfirm")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteReport}
+              className="bg-destructive text-destructive-foreground"
+            >
+              {t("common.delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Edit Notes Dialog */}
+      <Dialog open={editNotesDialogOpen} onOpenChange={setEditNotesDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("moderation.editReport")}</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            value={editNotes}
+            onChange={(e) => setEditNotes(e.target.value)}
+            placeholder={t("moderation.notesPlaceholder")}
+            className="min-h-[100px]"
+          />
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => handleEditNotes("dismissed")}>
+              <XCircle className="w-4 h-4 mr-2" />
+              {t("moderation.dismiss")}
+            </Button>
+            <Button onClick={() => handleEditNotes("reviewed")}>
+              <CheckCircle className="w-4 h-4 mr-2" />
+              {t("moderation.markReviewed")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

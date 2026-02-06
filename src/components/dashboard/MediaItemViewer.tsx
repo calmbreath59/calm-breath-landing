@@ -72,12 +72,14 @@ export const MediaItemViewer = ({ item, onBack }: MediaItemViewerProps) => {
           </div>
         </CardHeader>
         <CardContent>
-          {/* Video/Audio Player */}
+          {/* Video/Audio Player - Download disabled */}
           {item.type === "video" && item.file_url && (
             <div className="aspect-video bg-muted rounded-lg overflow-hidden mb-6">
               <video
                 src={item.file_url}
                 controls
+                controlsList="nodownload"
+                onContextMenu={(e) => e.preventDefault()}
                 className="w-full h-full object-contain"
               />
             </div>
@@ -85,13 +87,24 @@ export const MediaItemViewer = ({ item, onBack }: MediaItemViewerProps) => {
 
           {item.type === "audio" && item.file_url && (
             <div className="bg-muted rounded-lg p-6 mb-6">
-              <audio src={item.file_url} controls className="w-full" />
+              <audio 
+                src={item.file_url} 
+                controls 
+                controlsList="nodownload"
+                onContextMenu={(e) => e.preventDefault()}
+                className="w-full" 
+              />
             </div>
           )}
 
-          {/* Guide Content */}
+          {/* Guide Content - Selection/Copy disabled */}
           {item.type === "guide" && getTranslatedContent() && (
-            <div className="prose prose-sm dark:prose-invert max-w-none mb-6">
+            <div 
+              className="prose prose-sm dark:prose-invert max-w-none mb-6 select-none"
+              onCopy={(e) => e.preventDefault()}
+              onCut={(e) => e.preventDefault()}
+              onContextMenu={(e) => e.preventDefault()}
+            >
               <div className="whitespace-pre-wrap">{getTranslatedContent()}</div>
             </div>
           )}
