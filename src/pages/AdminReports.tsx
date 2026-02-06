@@ -44,7 +44,7 @@ const AdminReports = () => {
   const { t, i18n } = useTranslation();
   const { user, isAdmin, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const { reports, isLoading, updateReportStatus, hideComment, deleteComment, fetchReports } =
+  const { reports, isLoading, updateReportStatus, hideComment, deleteComment, deleteReport, reopenReport, fetchReports } =
     useCommentReports();
   const { createNotification } = useNotifications();
 
