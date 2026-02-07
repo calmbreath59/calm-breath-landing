@@ -30,8 +30,15 @@ const Banned = () => {
   const [appealMessage, setAppealMessage] = useState("");
 
   const handleSignOut = async () => {
-    await signOut();
-    navigate("/");
+    try {
+      await signOut();
+      // Use window.location for a full page redirect to ensure clean state
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error during sign out:", error);
+      // Fallback: force redirect even on error
+      window.location.href = "/";
+    }
   };
 
   const { data: appeals = [], isLoading: appealsLoading } = useQuery({
