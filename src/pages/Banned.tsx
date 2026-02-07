@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -8,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Ban, Send, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Ban, Send, Clock, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 
 interface BanAppeal {
@@ -23,11 +24,17 @@ interface BanAppeal {
 
 const Banned = () => {
   const { t } = useTranslation();
-  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+  const { user, profile, signOut, isLoading: authLoading } = useAuth();
   const queryClient = useQueryClient();
   const [appealMessage, setAppealMessage] = useState("");
 
-  const { data: appeals = [], isLoading } = useQuery({
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
+  const { data: appeals = [], isLoading: appealsLoading } = useQuery({
     queryKey: ["ban-appeals", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -40,6 +47,8 @@ const Banned = () => {
       return data as BanAppeal[];
     },
     enabled: !!user?.id,
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   const submitAppeal = useMutation({
@@ -60,6 +69,7 @@ const Banned = () => {
     },
   });
 
+  const isLoading = authLoading || appealsLoading;
   const hasPendingAppeal = appeals.some((a) => a.status === "pending");
 
   const getStatusBadge = (status: string) => {
@@ -74,6 +84,14 @@ const Banned = () => {
         return <Badge variant="outline">{status}</Badge>;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -153,7 +171,7 @@ const Banned = () => {
         )}
 
         <div className="text-center">
-          <Button variant="outline" onClick={signOut}>
+          <Button variant="outline" onClick={handleSignOut}>
             {t("common.logout")}
           </Button>
         </div>
